@@ -1,0 +1,319 @@
+:root {
+  --pink: #de3163;
+  --grey: #6c757d;
+  --white: #ffffff;
+  --bg: #f8f9fa; /* This is the bg-light Bootstrap color */
+  --dark: #212529;
+}
+
+html {
+  scroll-behavior: auto !important;
+}
+/**************************************/
+/* General Styling */
+/**************************************/
+
+body {
+  background-color: var(--bg);
+  min-height: 100vh;
+}
+
+h3 {
+  color: var(--pink);
+}
+.forgot-password-link,
+.terms-conditions-link {
+  color: var(--pink) !important; /* Red text */
+}
+
+@media (max-width: 992px) {
+  .auth-container {
+    min-height: 100vh;
+    padding: 100px 0px;
+  }
+
+  .action-buttons {
+    float: left;
+  }
+}
+
+@media (min-width: 992px) {
+  .auth-container {
+    min-height: calc(100vh);
+    padding: 100px 0px;
+  }
+
+  .action-buttons {
+    float: right;
+  }
+}
+
+/*************************************/
+/* Hero Styling*/
+/*************************************/
+
+#hero {
+  background:
+    linear-gradient(to right, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.4)),
+    url("http://192.168.170.3/carelick_web/server/photos/canada-3290310_1280.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 600px;
+  width: 100%;
+  position: relative;
+}
+
+#hero .overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 600px;
+  z-index: 1;
+}
+
+#hero .content {
+  position: absolute;
+  padding-top: 100px;
+  top: 0;
+  left: 0;
+  height: 600px;
+  color: white;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 100%;
+}
+
+/*************************************/
+/* Bootstrap Theme Styling */
+/*************************************/
+
+.btn-primary {
+  background-color: var(--pink) !important;
+  border-color: var(--pink) !important;
+}
+
+.btn-outline-primary {
+  border-color: var(--pink) !important; /* Red border */
+  color: var(--pink) !important; /* Red text */
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--pink) !important; /* Red background on hover */
+  color: var(--white) !important; /* White text on hover */
+}
+
+p {
+  font-size: 20px;
+}
+
+.form-check-input:checked {
+  background-color: var(--pink);
+  border-color: var(--pink);
+}
+
+.form-check-input:focus {
+  box-shadow: 0 0 0 0.25rem rgba(222, 49, 99, 0.25);
+}
+
+/********************************/
+/* Event Cards Styling */
+/********************************/
+
+.card-hover {
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+
+.card-hover:hover {
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+}
+
+.card-image-wrapper {
+  height: 200px; /* Fixed container height */
+  overflow: hidden;
+  position: relative;
+  padding: 5px;
+  box-sizing: border-box;
+}
+
+.card-img-top {
+  width: 100%;
+  height: auto;
+  transition: transform 1.5s ease-in-out;
+  display: block;
+  position: relative;
+  opacity: 0.9;
+  border-radius: 5px;
+}
+
+.card-hover:hover .card-title {
+  color: var(--pink);
+}
+
+/*************************************************************************/
+/* Auth Wavy Section from https://prismic.io/blog/css-background-effects */
+/*************************************************************************/
+section {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+section .wave {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--pink);
+  box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.5);
+  transition: 0.5s;
+}
+
+section .wave span {
+  content: "";
+  position: absolute;
+  width: 325vh;
+  height: 325vh;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -75%);
+  background: #fff;
+}
+
+section .wave span:nth-child(1) {
+  border-radius: 45%;
+  background: rgba(255, 255, 255, 1);
+  animation: animate 15s linear infinite;
+}
+
+section .wave span:nth-child(2) {
+  border-radius: 40%;
+  background: rgba(255, 255, 255, 0.5);
+  animation: animate 30s linear infinite;
+}
+
+section .wave span:nth-child(3) {
+  border-radius: 42.5%;
+  background: rgba(255, 255, 255, 0.5);
+  animation: animate 45s linear infinite;
+}
+
+@keyframes animate {
+  0% {
+    transform: translate(-50%, -75%) rotate(0deg);
+  }
+
+  100% {
+    transform: translate(-50%, -75%) rotate(360deg);
+  }
+}
+
+/**************************************************************/
+/* News Marquee Home Page styling */
+/***************************************************************/
+
+.marquee-text:hover {
+  color: var(--pink);
+  cursor: pointer;
+}
+
+/**************************************************************/
+/* News Container styling */
+/***************************************************************/
+.news-container,
+.events-container {
+  padding-top: 125px;
+}
+
+/*************************************************************/
+/* Pagination button Styling */
+/*************************************************************/
+/* Make pagination pink themed */
+.pagination .page-link {
+  color: var(--pink);
+  border-color: var(--pink);
+}
+
+.pagination .page-link:hover {
+  background-color: var(--pink);
+  color: white;
+  border-color: var(--pink);
+}
+
+/* Active pagination item */
+.pagination .page-item.active .page-link {
+  background-color: var(--pink);
+  border-color: var(--pink);
+  color: white;
+}
+
+/****************************************/
+/* Link Theme */
+/****************************************/
+
+.nav-link {
+  color: grey; /* Inactive */
+  background-color: transparent;
+  transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+  color: var(--pink);
+}
+
+.nav-link.active {
+  color: white;
+  background-color: var(--pink);
+}
+
+.nav-link:focus {
+  color: var(--pink);
+}
+
+/******************************/
+/*Gallery Image Card*/
+/******************************/
+.image-card {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  overflow: hidden;
+  cursor: pointer;
+  border-radius: 10px;
+}
+
+.thumbnail-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 1s ease-in-out;
+  border-radius: 10px;
+}
+
+.image-card:hover .thumbnail-img {
+  transform: scale(1.2);
+}
+.fade {
+  transition: opacity 1s ease; /* 1s */
+}
+
+.overlay-count {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6); /* dark background */
+  color: white;
+  font-size: 48px; /* large text */
+  font-weight: bold;
+}

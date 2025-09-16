@@ -1,0 +1,43 @@
+﻿import * as React from "react";
+import { Row, Container, Col } from "react-bootstrap";
+import Animate from "../components/Animate";
+import UnixTimeDisplay from "../components/UnixTimeDisplay";
+import useNews from "../hooks/website/useNews";
+
+const News = () => {
+  let { response } = useNews();
+  response = response?.message;
+
+  return (
+    <div className="news-container">
+      <Container className="pt-5">
+        <Row>
+          <Col>
+            <Animate>
+              <h2 className="mb-4">News</h2>
+            </Animate>
+
+            <div>
+              {response?.map((item: any) => {
+                return (
+                  <Animate delay={0.3}>
+                    <div className="pt-4 pb-4">
+                      <h3> 📢{item.title}</h3>
+                      <p>{item.headline}</p>
+                      <p>
+                        <b>Posted date:</b> {"    "}{" "}
+                        <UnixTimeDisplay unix={item.creation_time} />
+                      </p>
+                    </div>
+                  </Animate>
+                );
+              })}
+            </div>
+          </Col>
+        </Row>
+      </Container>
+    </div>
+  );
+};
+
+export default News;
