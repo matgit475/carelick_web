@@ -1,20 +1,30 @@
-import * as React from "react";
-import useLogin from "../auth/useLogin";
 import useForm from "../forms/useForm";
+import { login } from "../../api/api";
+import { useAuth } from "../../context/auth";
+import { useNavigate } from "react-router-dom";
 
 const useLoginForm = () => {
   const initialData = { username: "", password: "" };
-  const { loginUser, error, loading } = useLogin();
-  const { formData, handleChange, handleSubmit } = useForm(
+  const { values, isSubmitting, errorMessage, onChange, onSubmit } = useForm(
     initialData,
-    loginUser,
+    { submit: login },
   );
+  const { setUser } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    onSubmit().then((res: any) => {
+      setUser(res);
+      res?.role == "admin" ? navigate("/admin-portal/dashboard") : null; // navigates to dashoboard on successful login
+    });
+  };
 
   return {
-    error,
-    loading,
-    formData,
-    handleChange,
+    values,
+    isSubmitting,
+    errorMessage,
+    handleChange: onChange,
     handleSubmit,
   };
 };

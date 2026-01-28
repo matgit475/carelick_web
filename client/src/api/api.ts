@@ -24,12 +24,12 @@ export const logout = async (data: any) => {
 };
 
 export const register = async (data: any) => {
-  const response = await API.post("/register?validateOnly=false", data);
+  const response = await API.post("/register", data);
   return response.data;
 };
 
-export const validateOnlyRegister = async (data: any) => {
-  const response = await API.post("/register?validateOnly=true", data);
+export const validateRegisterField = async (data: any) => {
+  const response = await API.post("/register/field/validate", data);
   return response.data;
 };
 
@@ -38,8 +38,15 @@ export const forgotPassword = async (data: any) => {
   return response.data;
 };
 
-export const currentUser = async () => {
-  const response = await API.get("/current_user");
+export const account = (view: any) => API.get(`/account?view=${view}`);
+
+export const validateAccountField = async (data: any) => {
+  const response = await API.post("/account/field/validate", data);
+  return response.data;
+};
+
+export const updateAccount = async (data: any) => {
+  const response = await API.post("/update_account", data);
   return response.data;
 };
 

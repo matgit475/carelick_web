@@ -5,10 +5,9 @@ const CARDS_PER_PAGE = 3;
 const usePaginatedFilteredEvents = (events: any) => {
   const [filter, setFilter] = React.useState("all");
   const [currentPage, setCurrentPage] = React.useState(1);
-
   const today = new Date();
   const filteredEvents = events?.filter((event: any) => {
-    const eventDate = event.creation_time;
+    const eventDate = event?.creation_time;
     if (filter === "upcoming") return eventDate > today;
     if (filter === "past") return eventDate < today;
     return true;

@@ -1,9 +1,9 @@
 import { useEffect } from "react";
-import { useGetRequest } from "../useGetRequest";
+import { useGetRequest } from "../api/useGetRequest";
 import { home } from "../../api/api";
 
 const useHome = () => {
-  const { sendRequest, loading, error, response } = useGetRequest<any>(home);
+  const { sendRequest, loading, error, response } = useGetRequest(home);
 
   useEffect(() => {
     sendRequest();

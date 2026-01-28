@@ -1,21 +1,15 @@
 import { useState } from "react";
-interface ErrorState {
-  status: number | null;
-  message: string | null;
-}
 
-export const useGetRequest = <TResponse, TParam = any>(
-  requestFn: (param?: TParam) => Promise<TResponse>,
-) => {
+export const usePostRequest = (requestFn: any) => {
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<ErrorState | null>(null);
-  const [response, setResponse] = useState<TResponse | null>(null);
+  const [error, setError] = useState(null);
+  const [response, setResponse] = useState(null);
 
-  const sendRequest = async (param?: TParam): Promise<TResponse | null> => {
+  const sendRequest = async (data: any) => {
     setLoading(true);
     setResponse(null);
     try {
-      const result = await requestFn(param);
+      const result = await requestFn(data);
       setError(null);
       setResponse(result);
       return result;
@@ -42,7 +36,7 @@ export const useGetRequest = <TResponse, TParam = any>(
     }
   };
 
-  return { sendRequest, response, loading, error };
+  return { sendRequest, response, loading, error, setError };
 };
 
-export default useGetRequest;
+export default usePostRequest;

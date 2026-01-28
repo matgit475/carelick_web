@@ -1,5 +1,5 @@
 ﻿import * as React from "react";
-import EventCards from "../components/EventCards";
+import EventCards from "../../components/public/EventCards";
 import {
   Button,
   ButtonGroup,
@@ -8,13 +8,12 @@ import {
   Col,
   Pagination,
 } from "react-bootstrap";
-import Animate from "../components/Animate";
-import useEvents from "../hooks/website/useEvents";
-import usePaginatedFilteredEvents from "../hooks/usePaginatedFilteredEvents";
+import Animate from "../../components/Animate";
+import useEvents from "../../hooks/public/useEvents";
+import usePaginatedFilteredEvents from "../../hooks/usePaginatedFilteredEvents";
 
 const Events = () => {
   let { response } = useEvents();
-  response = response?.message;
   const {
     filter,
     currentPage,

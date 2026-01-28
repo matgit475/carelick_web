@@ -24,13 +24,25 @@ class ResponseHelper {
     }
 
     public static function response($result): void {
-    try {
-        if ($result instanceof Throwable) {
-            throw $result;
+        try {
+            if ($result instanceof Throwable) {
+                throw $result;
+            }
+            self::sendSuccessResponse(['message' => $result]);
+        } catch (Throwable $e) {
+            self::handleException($e);
         }
-        self::sendSuccessResponse(['message' => $result]);
-    } catch (Throwable $e) {
-        self::handleException($e);
     }
-}
+
+    public static function res($result): void {
+            try{
+                if ($result instanceof Exception) {
+                    throw $result;
+                }
+                self::sendSuccessResponse($result);
+            }
+            catch(Exception $e){
+                self::handleException($e);
+            }
+    }
 }

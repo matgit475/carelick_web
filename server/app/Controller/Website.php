@@ -7,22 +7,22 @@
 
         public function events($request){
             $result = $this->websiteService->events();
-            ResponseHelper::response($result);
+            ResponseHelper::res($result);
         }
 
         public function home($request){
             $result = $this->websiteService->home();
-            ResponseHelper::response($result);
+            ResponseHelper::res($result);
         }
 
         public function news($request){
             $result = $this->websiteService->news();
-            ResponseHelper::response($result);
+            ResponseHelper::res($result);
         }
 
         public function event($request){
             $id = $request['params']['id'];
             $result = $this->websiteService->event($id);
-            ResponseHelper::response($result);
+            ResponseHelper::res($result);
         }
     }

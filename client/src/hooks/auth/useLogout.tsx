@@ -1,4 +1,4 @@
-import { usePostRequest } from "../usePostRequest";
+import { usePostRequest } from "../api/usePostRequest";
 import { logout } from "../../api/api";
 import { useAuth } from "../../context/auth";
 import { useNavigate } from "react-router-dom";

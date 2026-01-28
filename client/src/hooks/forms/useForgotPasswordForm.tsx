@@ -1,21 +1,28 @@
 import * as React from "react";
-import useForgotPassword from "../auth/useForgotPassword";
 import useForm from "../forms/useForm";
+import { forgotPassword } from "../../api/api";
 
 const useForgotPasswordForm = () => {
   const initialData = { email: "" };
-  const { error, loading, sendNewPassword, response } = useForgotPassword();
-  const { formData, handleChange, handleSubmit } = useForm(
-    initialData,
-    sendNewPassword,
-  );
+  const {
+    values,
+    isSubmitting,
+    successMessage,
+    errorMessage,
+    onChange,
+    onSubmit,
+  } = useForm(initialData, { submit: forgotPassword });
+
   return {
-    error,
-    loading,
-    response,
-    formData,
-    handleChange,
-    handleSubmit,
+    values,
+    successMessage,
+    errorMessage,
+    isSubmitting,
+    handleChange: onChange,
+    handleSubmit: (e: any) => {
+      e.preventDefault();
+      onSubmit();
+    },
   };
 };
 

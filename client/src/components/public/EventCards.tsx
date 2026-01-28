@@ -1,9 +1,9 @@
 ﻿import * as React from "react";
-import useImageScrollOnHover from "../hooks/useImageScrollOnHover";
+import useImageScrollOnHover from "../../hooks/useImageScrollOnHover";
 import { useNavigate } from "react-router-dom";
 import { SlCalender } from "react-icons/sl";
 import { Card, Row, Col, Container } from "react-bootstrap";
-import UnixTimeDisplay from "../components/UnixTimeDisplay";
+import UnixTimeDisplay from "./UnixTimeDisplay";
 
 const HoverCard: React.FC<{ event: any }> = ({ event }) => {
   const { wrapperRef, imgRef, setHovered, transformStyle } =

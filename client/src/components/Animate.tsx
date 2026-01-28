@@ -2,20 +2,27 @@ import * as React from "react";
 import { motion, useInView } from "framer-motion";
 
 type EaseFadeProps = {
-  children: React.ReactElement;
+  children: React.ReactElement[] | React.ReactElement;
+  duration?: number;
   delay?: number;
+  y?: number;
 };
 
-const Animate = ({ children, delay = 0 }: EaseFadeProps) => {
+const Animate = ({
+  children,
+  delay = 0,
+  duration = 1.5,
+  y = 75,
+}: EaseFadeProps) => {
   const ref = React.useRef(null);
   const isInView = useInView(ref, { once: true });
 
   return (
     <motion.div
       ref={ref}
-      initial={{ opacity: 0, y: 30 }}
+      initial={{ opacity: 0, y }}
       animate={isInView ? { opacity: 1, y: 0 } : {}}
-      transition={{ duration: 0.7, ease: [0.33, 1, 0.68, 1], delay }}
+      transition={{ duration, ease: [0.33, 1, 0.68, 1], delay }}
     >
       {children}
     </motion.div>

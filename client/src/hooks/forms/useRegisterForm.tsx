@@ -1,8 +1,8 @@
 import * as React from "react";
 import useForm from "../forms/useForm";
-import useRegister from "../auth/useRegister";
-import useOnlyValidateRegister from "../auth/useOnlyValidateRegister";
-
+import { validateRegisterField } from "../../api/api";
+import { register } from "../../api/api";
+import { useAuth } from "../../context/auth";
 const useRegisterForm = () => {
   const initialData = {
     firstName: "",
@@ -12,40 +12,46 @@ const useRegisterForm = () => {
     confirmPassword: "",
     termsAccepted: false,
   };
-  const [error, setError] = React.useState({ status: null, message: null });
-  const { registerUser, loading, response } = useRegister(setError);
-  const { onlyValidateRegisterUser } = useOnlyValidateRegister(setError);
-  const checkboxRef = React.useRef(null);
+  const { setUser } = useAuth();
   const {
-    formData,
-    setFormData,
-    handleChange,
-    handleSubmit,
-    handleBlur,
-    isSubmitted,
-  } = useForm(initialData, registerUser, onlyValidateRegisterUser);
+    values,
+    errorMessage,
+    fieldErrors,
+    check,
+    onChange,
+    onChecked,
+    onSubmit,
+    onBlur,
+    isSubmitting,
+  } = useForm(initialData, {
+    submit: register,
+    validate: validateRegisterField,
+  });
 
   const handleAccept = () => {
-    checkboxRef.current?.focus();
-    setFormData({ ...formData, ["termsAccepted"]: true });
+    check("termsAccepted");
   };
 
-  const handleChecked = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, checked } = e.target;
-    setFormData({ ...formData, [name]: checked });
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    onSubmit().then((user: any) => {
+      setUser(user);
+    });
+  };
+
+  const handleBlur = (e: any) => {
+    onBlur(e.target.name);
   };
 
   return {
-    error,
-    loading,
-    response,
-    formData,
-    isSubmitted,
-    checkboxRef,
-    handleChange,
+    values,
+    fieldErrors,
+    errorMessage,
+    isSubmitting,
     handleBlur,
-    handleChecked,
     handleSubmit,
+    handleChange: onChange,
+    handleChecked: onChecked,
     handleAccept,
   };
 };

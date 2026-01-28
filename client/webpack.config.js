@@ -31,11 +31,12 @@ module.exports = (env) => {
     },
     plugins: [
       new Dotenv({
-        path: env.production ? "./.env.production" : "./.env.development", // Load the correct .env file based on the mode
+        path:
+          env.production == "true" ? "./.env.production" : "./.env.development", // Load the correct .env file based on the mode
       }),
     ],
     mode: env.production ? "production" : "development",
-    devtool: "eval-source-map", // Best for dev with fast rebuilds
+    devtool: "source-map", // Best for dev with fast rebuilds
     devServer: {
       static: {
         directory: path.join(__dirname, "dist"),

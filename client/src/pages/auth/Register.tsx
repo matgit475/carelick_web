@@ -3,20 +3,17 @@ import { Form, Button, Row, Col, Alert, Card } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import TermsAndConditionsModal from "../../components/modals/TermsAndConditionsModal";
 import useRegisterForm from "../../hooks/forms/useRegisterForm";
-import RequiredLabel from "../../components/RequiredLabel";
+import RequiredLabel from "../../components/form/RequiredLabel";
 import DangerAlert from "../../components/alerts/DangerAlert";
-import SuccessAlert from "../../components/alerts/SuccessAlert";
 import validationError from "../../helpers/ValidationError";
 import Animate from "../../components/Animate";
 
 const Register = () => {
   const {
-    error,
-    loading,
-    response,
-    formData,
-    isSubmitted,
-    checkboxRef,
+    errorMessage,
+    fieldErrors,
+    values,
+    isSubmitting,
     handleBlur,
     handleChange,
     handleChecked,
@@ -27,13 +24,12 @@ const Register = () => {
   return (
     <Row className="justify-content-center w-100">
       <Col xs={12} md={8} lg={8} xl={6} xxl={6}>
-        <Animate>
+        <Animate duration={0.5} y={25}>
           <Card>
             <Card.Body className="p-5">
               <h3 className="text-center mb-4">Register</h3>
               <p className="text-center">Register the right way</p>
-              <SuccessAlert response={response} />
-              <DangerAlert error={error} />
+              <DangerAlert message={errorMessage} />
               <Form onSubmit={handleSubmit} method="post" noValidate>
                 <Row>
                   <Col lg={6}>
@@ -43,17 +39,14 @@ const Register = () => {
                         type="text"
                         name="firstName"
                         placeholder="Enter first name"
-                        value={formData.firstName}
+                        value={values?.firstName}
                         onChange={handleChange}
                         onBlur={handleBlur}
-                        isInvalid={
-                          isSubmitted &&
-                          validationError(error, "firstName", "First Name")
-                        }
+                        isInvalid={validationError(fieldErrors, "firstName")}
                         autoFocus
                       />
                       <Form.Control.Feedback type="invalid">
-                        {validationError(error, "firstName", "First Name")}
+                        {validationError(fieldErrors, "firstName")}
                       </Form.Control.Feedback>
                     </Form.Group>
                   </Col>
@@ -64,16 +57,13 @@ const Register = () => {
                         type="text"
                         name="lastName"
                         placeholder="Enter last name"
-                        value={formData.lastName}
+                        value={values?.lastName}
                         onChange={handleChange}
                         onBlur={handleBlur}
-                        isInvalid={
-                          isSubmitted &&
-                          validationError(error, "lastName", "Last Name")
-                        }
+                        isInvalid={validationError(fieldErrors, "lastName")}
                       />
                       <Form.Control.Feedback type="invalid">
-                        {validationError(error, "lastName", "Last Name")}
+                        {validationError(fieldErrors, "lastName")}
                       </Form.Control.Feedback>
                     </Form.Group>
                   </Col>
@@ -85,15 +75,13 @@ const Register = () => {
                     type="email"
                     name="email"
                     placeholder="Enter email"
-                    value={formData.email}
+                    value={values?.email}
                     onChange={handleChange}
                     onBlur={handleBlur}
-                    isInvalid={
-                      isSubmitted && validationError(error, "email", "Email")
-                    }
+                    isInvalid={validationError(fieldErrors, "email")}
                   />
                   <Form.Control.Feedback type="invalid">
-                    {validationError(error, "email", "Email")}
+                    {validationError(fieldErrors, "email")}
                   </Form.Control.Feedback>
                 </Form.Group>
                 <Row>
@@ -104,16 +92,13 @@ const Register = () => {
                         type="password"
                         name="password"
                         placeholder="Password"
-                        value={formData.password}
+                        value={values?.password}
                         onChange={handleChange}
                         onBlur={handleBlur}
-                        isInvalid={
-                          isSubmitted &&
-                          validationError(error, "password", "Password")
-                        }
+                        isInvalid={validationError(fieldErrors, "password")}
                       />
                       <Form.Control.Feedback type="invalid">
-                        {validationError(error, "password", "Password")}
+                        {validationError(fieldErrors, "password")}
                       </Form.Control.Feedback>
                     </Form.Group>
                   </Col>
@@ -127,24 +112,16 @@ const Register = () => {
                         type="password"
                         name="confirmPassword"
                         placeholder="Confirm password"
-                        value={formData.confirmPassword}
+                        value={values?.confirmPassword}
                         onChange={handleChange}
                         onBlur={handleBlur}
-                        isInvalid={
-                          isSubmitted &&
-                          validationError(
-                            error,
-                            "confirmPassword",
-                            "Confirm Password",
-                          )
-                        }
+                        isInvalid={validationError(
+                          fieldErrors,
+                          "confirmPassword",
+                        )}
                       />
                       <Form.Control.Feedback type="invalid">
-                        {validationError(
-                          error,
-                          "confirmPassword",
-                          "Confirm Password",
-                        )}
+                        {validationError(fieldErrors, "confirmPassword")}
                       </Form.Control.Feedback>
                     </Form.Group>
                   </Col>
@@ -153,10 +130,9 @@ const Register = () => {
                   <Form.Check
                     id="accept-terms-checkbox"
                     name="termsAccepted"
-                    ref={checkboxRef}
                     type="checkbox"
                     className="mb-3 d-inline"
-                    checked={formData.termsAccepted}
+                    checked={values?.termsAccepted}
                     onChange={handleChecked}
                     onBlur={handleBlur}
                   />
@@ -169,18 +145,17 @@ const Register = () => {
                     <TermsAndConditionsModal onAccept={handleAccept} />
                   </label>
                   <Form.Control.Feedback type="invalid" className="d-block">
-                    {isSubmitted &&
-                      validationError(error, "termsAccepted", "Terms Accepted")}
+                    {validationError(fieldErrors, "termsAccepted")}
                   </Form.Control.Feedback>
                 </Form.Group>
                 <div className="d-flex gap-3 pt-3">
                   <Button
                     variant="primary"
                     type="submit"
-                    disabled={loading}
+                    disabled={isSubmitting}
                     className="w-50"
                   >
-                    {loading ? "Registering..." : "Register"}
+                    {isSubmitting ? "Registering..." : "Register"}
                   </Button>
                   <Link to="/auth/login" className="w-50">
                     <Button variant="outline-primary" className="w-100">

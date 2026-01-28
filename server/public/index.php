@@ -2,7 +2,6 @@
 	// Define the base path
 
 	define('BASE_PATH', dirname(__DIR__));
-	
 	require BASE_PATH.'/vendor/autoload.php'; // Adjust the path if needed
 	require BASE_PATH.'/app/Helpers/ResponseHelper.php';
 	require BASE_PATH.'/app/Helpers/AuthorizeHelper.php';
@@ -40,17 +39,21 @@
 	require BASE_PATH.'/app/Controller/Website.php';
 
 	require BASE_PATH."/app/Middleware/Middleware.php";
-	require BASE_PATH."/app/Middleware/ValidationMiddleware.php";
+	require BASE_PATH."/app/Middleware/Validation/FormValidationMiddleware.php";
+	require BASE_PATH."/app/Middleware/Validation/FieldValidationMiddleware.php";
 	require BASE_PATH."/app/Middleware/JWTAuthMiddleware.php";
 	require BASE_PATH.'/app/Middleware/MultiRoleAuthMiddleware.php';
 	require BASE_PATH.'/app/Middleware/LoggingMiddleware.php';
 	require BASE_PATH.'/app/Middleware/CorsMiddleware.php';
 
+	$dotenv = Dotenv\Dotenv::createImmutable(BASE_PATH);
+	$dotenv->load();
+
 	// Dependency Injection Container
 	$container = new Container();
 
 	// Register services
-	$container->set(Database::class, new Database("localhost", "test", "root", ""));
+	$container->set(Database::class, new Database($_ENV['DB_HOST'], $_ENV['DB_NAME'], $_ENV['DB_USER'], $_ENV['DB_PASS']));
 
 	$container->set(UserRepository::class, new UserRepository($container->get(Database::class)));
 	$container->set(MemberRepository::class, new MemberRepository($container->get(Database::class)));
@@ -89,10 +92,6 @@
 	// Dispatch Route
 	$requestMethod = $_SERVER['REQUEST_METHOD'];
 	$requestUri = $_SERVER['REQUEST_URI'];
-	$requestUri = str_replace('/index.php', '', $requestUri);
-	$requestUri = str_replace('/carelick_web', '', $requestUri);
-	$requestUri = str_replace('/server', '', $requestUri);
-	$requestUri = str_replace('/public', '', $requestUri);
 	$requestPath = strtok($requestUri, '?'); // Remove query params
 	$router->dispatch($requestMethod, $requestPath);
 ?>

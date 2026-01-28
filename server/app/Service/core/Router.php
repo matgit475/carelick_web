@@ -48,8 +48,8 @@ class Router {
 
                     $controllerInstance = $this->container->get($route['controller']);
                     $action = $route['action'];
-
-                    if (method_exists($controllerInstance, $action)) {
+                    if ($action == null) return;
+                    else if (method_exists($controllerInstance, $action)) {
                         // Create Request object
                         $request = [
                             'method' => $requestMethod,

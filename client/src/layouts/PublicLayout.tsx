@@ -1,14 +1,21 @@
 import * as React from "react";
 import { Outlet } from "react-router-dom";
-import PublicHeader from "../components/header/PublicHeader";
+import Header, {
+  Navigation,
+  Logo,
+  LogButtons,
+} from "../components/header/Header";
 import Footer from "../components/Footer";
-import Space from "../components/Space";
 
 const PublicLayout = () => {
-  console.log("public layout print!");
   return (
     <div className="background">
-      <PublicHeader />
+      <Header expand="lg">
+        <Logo />
+        <Navigation>
+          <LogButtons />
+        </Navigation>
+      </Header>
       <Outlet />
       <Footer />
     </div>

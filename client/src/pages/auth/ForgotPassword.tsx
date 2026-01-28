@@ -7,21 +7,27 @@ import SuccessAlert from "../../components/alerts/SuccessAlert";
 import Animate from "../../components/Animate";
 
 const ForgotPassword = () => {
-  const { error, loading, response, formData, handleChange, handleSubmit } =
-    useForgotPasswordForm();
+  const {
+    values,
+    isSubmitting,
+    successMessage,
+    errorMessage,
+    handleChange,
+    handleSubmit,
+  } = useForgotPasswordForm();
 
   return (
     <Row className="justify-content-center w-100">
       <Col xs={12} md={8} lg={6} xl={6} xxl={4}>
-        <Animate>
+        <Animate duration={0.5} y={25}>
           <Card>
             <Card.Body className="p-5">
               <h3 className="text-center mb-4">Forgot Password</h3>
               <p className="text-center">
                 A new password will be sent to your registered email
               </p>
-              <SuccessAlert response={response} />
-              <DangerAlert error={error} />
+              <SuccessAlert message={successMessage} />
+              <DangerAlert message={errorMessage} />
               <Form
                 onSubmit={handleSubmit}
                 autoComplete="on"
@@ -34,7 +40,7 @@ const ForgotPassword = () => {
                     type="email"
                     name="email"
                     placeholder="Enter email"
-                    value={formData.email}
+                    value={values?.email}
                     onChange={handleChange}
                     autoFocus
                   />
@@ -43,10 +49,10 @@ const ForgotPassword = () => {
                   <Button
                     variant="primary"
                     type="submit"
-                    disabled={loading}
+                    disabled={isSubmitting}
                     className="w-50"
                   >
-                    {loading ? "Sending..." : "Send"}
+                    {isSubmitting ? "Sending..." : "Send"}
                   </Button>
                   <Link to="/auth/login" className="w-50">
                     <Button variant="outline-primary" className="w-100">

@@ -1,18 +1,16 @@
 import { useEffect } from "react";
-import { useGetRequest } from "../useGetRequest";
+import { useGetRequest } from "../api/useGetRequest";
 import { event } from "../../api/api";
 import useEventPageImagePreloader from "../useEventPageImagePreloader";
 
 const useEvents = (id: number | string) => {
-  const { sendRequest, loading, error, response } = useGetRequest<
-    any,
-    number | string
-  >(event);
-  const data = response?.message ?? {};
-  const { allImagesLoaded } = useEventPageImagePreloader(data);
+  const { sendRequest, loading, error, response } = useGetRequest(() =>
+    event(id),
+  );
+  const { allImagesLoaded } = useEventPageImagePreloader(response);
 
   useEffect(() => {
-    sendRequest(id);
+    sendRequest();
   }, [id]);
 
   const loaded = allImagesLoaded && !loading;

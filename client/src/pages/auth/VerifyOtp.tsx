@@ -5,20 +5,20 @@ import DangerAlert from "../../components/alerts/DangerAlert";
 import Animate from "../../components/Animate";
 
 const VerifyOtp = () => {
-  const { error, loading, formData, handleChange, handleSubmit } =
+  const { values, isSubmitting, errorMessage, handleChange, handleSubmit } =
     useVerifyOtpForm();
 
   return (
     <Row className="justify-content-center w-100">
       <Col xs={12} md={8} lg={6} xl={6} xxl={4}>
-        <Animate>
+        <Animate duration={0.5}>
           <Card>
             <Card.Body className="p-5">
               <h3 className="text-center mb-4">Login with OTP</h3>
               <p className="text-center">
                 Login with the OTP send to your email
               </p>
-              <DangerAlert error={error} />
+              <DangerAlert message={errorMessage} />
               <Form
                 onSubmit={handleSubmit}
                 autoComplete="on"
@@ -31,7 +31,7 @@ const VerifyOtp = () => {
                     type="email"
                     name="email"
                     placeholder="Enter email"
-                    value={formData.email}
+                    value={values?.email}
                     disabled
                   />
                 </Form.Group>
@@ -41,7 +41,7 @@ const VerifyOtp = () => {
                     type="text"
                     name="otp"
                     placeholder="Enter OTP"
-                    value={formData.otp}
+                    value={values?.otp}
                     onChange={handleChange}
                     autoFocus
                   />
@@ -50,10 +50,10 @@ const VerifyOtp = () => {
                   <Button
                     variant="primary"
                     type="submit"
-                    disabled={loading}
+                    disabled={isSubmitting}
                     className="w-100"
                   >
-                    {loading ? "Logging in..." : "Login"}
+                    {isSubmitting ? "Logging in..." : "Login"}
                   </Button>
                 </div>
               </Form>

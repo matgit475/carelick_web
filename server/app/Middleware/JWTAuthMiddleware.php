@@ -17,7 +17,9 @@
                 // Token is valid, add user info to request
                 $user = [
                     "role"=>$decodedToken->role, 
-                    "id"=>$decodedToken->sub
+                    "id"=>$decodedToken->sub,
+                    "email"=>$decodedToken->email,
+                    "first_name"=>$decodedToken->first_name
                 ];
                 UserContext::getInstance()->setUser($user);
 

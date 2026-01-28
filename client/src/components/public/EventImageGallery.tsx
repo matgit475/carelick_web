@@ -1,11 +1,11 @@
 import * as React from "react";
 import { Col } from "react-bootstrap";
 import FsLightbox from "fslightbox-react";
-import useLightBox from "../hooks/useLightbox";
-import GalleryImage from "../components/GalleryImage";
-import GallerySpecialImage from "../components/GallerySpecialImage";
-import Animate from "../components/Animate";
-import { getGalleryImageUrls } from "../helpers/Common";
+import useLightBox from "../../hooks/useLightbox";
+import GalleryImage from "./GalleryImage";
+import GallerySpecialImage from "./GallerySpecialImage";
+import Animate from "../Animate";
+import { getGalleryImageUrls } from "../../helpers/Common";
 
 type EventImageGalleryProps = {
   event_gallery: any;

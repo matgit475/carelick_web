@@ -13,7 +13,7 @@ class UserGroupRepository extends BaseRepository{
     public function getRoleByUserId(int $userId){
         $sql = "
             SELECT g.name AS name
-            FROM groups g
+            FROM `groups` g
             JOIN users_groups ug ON g.id = ug.group_id
             WHERE ug.user_id = :user_id
             LIMIT 1

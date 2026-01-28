@@ -14,7 +14,7 @@
                 'currency_code' => 'USD',
             ]);
             if (!preg_match('/^-?\d+$/', $amount)) {
-                throw new BadRequestException("Invalid amount! Must be a positive number.");
+                return new BadRequestException("Invalid amount! Must be a positive number.");
             }
 
             return ["url" =>$paypalBase . '?' . $params];

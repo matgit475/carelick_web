@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Container } from "react-bootstrap";
-import AuthHeader from "../components/header/AuthHeader";
+import Header, { Navigation, Logo } from "../components/header/Header";
 import { Outlet } from "react-router-dom";
 
 const AuthLayout = () => {
@@ -11,7 +11,10 @@ const AuthLayout = () => {
         <span></span>
         <span></span>
       </div>
-      <AuthHeader />
+      <Header expand="lg">
+        <Logo />
+        <Navigation />
+      </Header>
       <Container className="auth-container d-flex justify-content-center align-items-center">
         <Outlet />
       </Container>

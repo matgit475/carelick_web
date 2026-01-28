@@ -1,45 +1,28 @@
 import * as React from "react";
-import { User } from "../types";
-import { useLocalStorage } from "../hooks/useLocalStorage";
+import { account } from "../api/api";
+import useGetRequest from "../hooks/api/useGetRequest";
 
-interface AuthContextType {
-  user: User | null;
-  setUser: (user: User) => void;
-}
+const AuthContext = React.createContext(null);
 
-// Set default value as an empty object with appropriate types
-const defaultContextValue: AuthContextType = {
-  user: null,
-  setUser: () => {},
-};
-
-const AuthContext = React.createContext<AuthContextType>(defaultContextValue);
-
-export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
-  children,
-}) => {
-  const [user, setUser] = React.useState<User | null>(null);
-  const [storedUser, setStoredUser, removeStoredUser] = useLocalStorage(
-    "user",
-    null,
-  );
-
+export const AuthProvider = ({ children }: any) => {
+  const [user, setUser] = React.useState(null);
+  const { sendRequest } = useGetRequest(() => account("basic"));
+  const loadUser = () => {
+    sendRequest().then((res: any) => {
+      setUser(res?.data);
+    });
+  };
   React.useEffect(() => {
-    storedUser ? setUser(storedUser) : setUser(null);
+    loadUser();
   }, []);
-
-  React.useEffect(() => {
-    user ? setStoredUser(user) : removeStoredUser();
-  }, [user]);
-
   return (
-    <AuthContext.Provider value={{ user, setUser }}>
+    <AuthContext.Provider value={{ user, setUser, loadUser }}>
       {children}
     </AuthContext.Provider>
   );
 };
 
-export const useAuth = (): AuthContextType => {
+export const useAuth = () => {
   const context = React.useContext(AuthContext);
   return context;
 };

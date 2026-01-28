@@ -1,9 +1,12 @@
 import * as React from "react";
 import { Alert } from "react-bootstrap";
 
-const DangerAlert = ({ error }: any) => {
-  return error?.status !== 422 && error?.message ? (
-    <Alert variant="danger"> {error?.message} </Alert>
+const DangerAlert = ({ message }: any) => {
+  return message ? (
+    <Alert variant="danger" dismissible>
+      {" "}
+      {message}{" "}
+    </Alert>
   ) : null;
 };
 

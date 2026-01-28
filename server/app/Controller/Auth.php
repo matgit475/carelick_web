@@ -9,38 +9,23 @@
         public function login($request) {
             $email = trim($request['body']['username']);
             $password = trim($request['body']['password']);
-            
-            try{
-                $result = $this->authService->login($email, $password);
-                ResponseHelper::sendSuccessResponse($result);
-            }
-            catch(Exception $e){
-                ResponseHelper::handleException($e);
-            }
+
+            ResponseHelper::res($this->authService->login($email, $password));
         }
 
         public function login_with_otp($request) {
             $email = trim($request['body']['email']);
             $otp = trim($request['body']['otp']);
 
-            try{
-                $result = $this->authService->loginWithOpt($email, $otp);
-                ResponseHelper::sendSuccessResponse($result);
-            }
-            catch(Exception $e){
-                ResponseHelper::handleException($e);
-            }
+            $result = $this->authService->loginWithOpt($email, $otp);
+            ResponseHelper::res($result);
         }
 
         
         public function logout(){
-           try{
-                $result = $this->authService->logout();
-                ResponseHelper::sendSuccessResponse($result);
-            }
-            catch(Exception $e){
-                ResponseHelper::handleException($e);
-            }
+
+            $result = $this->authService->logout();
+            ResponseHelper::res($result);
         }
 
         public function register($request){
@@ -50,32 +35,40 @@
             $password = trim($request['body']['password']);
             $confirmPassword = trim($request['body']['confirmPassword']);
 
-            try{
-                $result = $this->authService->register($firstName, $lastName, $email, $password, $confirmPassword);
-                ResponseHelper::sendSuccessResponse($result);
-            }
-            catch(Exception $e){
-                ResponseHelper::handleException($e);
-            }
+            $result = $this->authService->register($firstName, $lastName, $email, $password, $confirmPassword);
+            ResponseHelper::res($result);
         }
 
         public function forgot_password($request){
             $email = trim($request['body']['email']);
-            try{
-                $result = $this->authService->forgot_password($email);
-                ResponseHelper::sendSuccessResponse($result);
-            }
-            catch(Exception $e){
-                ResponseHelper::handleException($e);
-            }            
+
+            $result = $this->authService->forgot_password($email);
+            ResponseHelper::res($result);           
         }
 
-        public function current_user($request){
-            try {
-                ResponseHelper::sendSuccessResponse(UserContext::getInstance()->getUser());
-            } catch (Exception $e) {
-                ResponseHelper::handleException($e);
-            }
+        public function account($request){
+                $view = $_GET['view'];
+                $userId = UserContext::getInstance()->getUser()["id"];
+                if ($view == "basic") {
+                    $result =  UserContext::getInstance()->getUser();
+                }
+                else $result = $this->authService->get_user_account($userId);
+                ResponseHelper::res($result);
+        }
+
+
+
+        public function update_account($request){
+            $firstName = trim($request['body']['first_name']);
+            $middleName = trim($request['body']['middle_name']);
+            $lastName = trim($request['body']['last_name']);
+            $newPassword = trim($request['body']['newPassword'] ?? '');
+            $retypePassword = trim($request['body']['retypePassword'] ?? '');
+            $phone = trim($request['body']['phone']);
+
+            $userId = UserContext::getInstance()->getUser()["id"];
+            $result = $this->authService->update_account($userId, $firstName, $middleName, $lastName, $newPassword, $retypePassword, $phone);
+            ResponseHelper::res($result);
         }
     }
 ?>

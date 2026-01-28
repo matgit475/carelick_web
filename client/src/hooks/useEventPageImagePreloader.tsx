@@ -6,13 +6,11 @@ import {
 } from "../helpers/Common";
 
 export const useEventPageImagePreloader = (response: any) => {
-  const { event = {}, event_gallery = {}, past_events = [] } = response;
-  const { event_image } = event;
-  const { event_images = "" } = event_gallery;
-
-  const url = getEventPhotoUrl(event_image);
-  const galleryImageUrls = getGalleryImageUrls(event_images);
-  const pastEventsImageUrls = EventsImageUrls(past_events);
+  const url = getEventPhotoUrl(response?.event?.event_image);
+  const galleryImageUrls = getGalleryImageUrls(
+    response?.event_gallery?.event_images,
+  );
+  const pastEventsImageUrls = EventsImageUrls(response?.past_events);
 
   const allImagesUrls = [
     ...(galleryImageUrls || []),

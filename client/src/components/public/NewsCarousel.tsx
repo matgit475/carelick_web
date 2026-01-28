@@ -2,7 +2,7 @@
 import Marquee from "react-fast-marquee";
 import { Card } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
-import UnixTimeDisplay from "../components/UnixTimeDisplay";
+import UnixTimeDisplay from "./UnixTimeDisplay";
 
 interface NewsItem {
   title: string;

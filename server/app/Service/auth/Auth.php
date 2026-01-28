@@ -23,12 +23,14 @@
 
         private static $secret_key = "1234567890qwertyuiopasdfghjklzxcvbnm"; // Keep this secret & secure
 
-        public static function generateToken($userId, $role) {
+        public static function generateToken($userId, $role, $email, $first_name) {
             $payload = [
                 "iat" => time(),            // Issued at
                 "exp" => time() + 3600,     // Expiry (1 hour)
                 "sub" => $userId,           // User ID
-                "role" => $role
+                "role" => $role,
+                "email"=> $email,
+                "first_name"=> $first_name
             ];
             return JWT::encode($payload, self::$secret_key, 'HS256');
         }
@@ -47,10 +49,13 @@
             if ($user && ($otp == $user['last_otp'])) {
                 $userId = $user['id'];
                 $role = $this->userGroupRepository->getRoleByUserId($userId);
-
+                $user = $this->userRepository->find($userId);
+                $email = $user["email"];
+                $first_name = $user["first_name"];
+                
                 $this->userRepository->markEmailVerified($userId);
 
-                $token = $this->generateToken($userId, $role);
+                $token = $this->generateToken($userId, $role, $email, $first_name);
                 setcookie('token', $token, [
                     'httpOnly' => true,
                     'secure' => true,
@@ -59,9 +64,9 @@
                     'expires' => time() + 3600,
                 ]);
 
-                return ["id"=>$userId, "role"=>$role];
+                return ["id"=>$userId, "role"=>$role, "email"=>$email, "first_name"=>$first_name];
             } else {
-                throw new UnauthorizedException("Your OTP was incorrect. Please try again.");
+                return new UnauthorizedException("Your OTP was incorrect. Please try again.");
             }
 
         }
@@ -81,7 +86,7 @@
                     
                     // Send email
                     if ($this->emailManager->sendOtpEmail($email,$otp)){
-                        throw new UnauthorizedException("Your email address is not verified. Please check your inbox to login with OTP.");
+                        return new UnauthorizedException("Your email address is not verified. Please check your inbox to login with OTP.");
                     }
                 }
             }
@@ -90,7 +95,10 @@
             if ($user && password_verify($password, $user['password'])) {
                 $userId = $user['id'];
                 $role = $this->userGroupRepository->getRoleByUserId($userId);
-                $token = $this->generateToken($userId, $role);
+                $user = $this->userRepository->find($userId);
+                $email = $user["email"];
+                $first_name = $user["first_name"];
+                $token = $this->generateToken($userId, $role, $email, $first_name);
 
                 setcookie('token', $token, [
                     'httpOnly' => true,
@@ -100,9 +108,9 @@
                     'expires' => time() + 3600,
                 ]);
 
-                return ["id"=>$userId, "role"=>$role];
+                return ["id"=>$userId, "role"=>$role, "email"=>$email, "first_name"=>$first_name];
             } else {
-                throw new UnauthorizedException("Your email or password was incorrect. Please try again.");
+                return new UnauthorizedException("Your email or password was incorrect. Please try again.");
             }
         }
 
@@ -120,13 +128,13 @@
         public function register($firstName, $lastName, $email, $password, $confirmPassword){
             // Step 1: Check if passwords are same
             if ($password !== $confirmPassword){
-                throw new BadRequestException("Passwords don't match!");
+                return new BadRequestException("Passwords don't match!");
             }
 
             // Step 2: Check if the email already exists in the database
             $existingUser = $this->userRepository->findByEmail($email);
             if ($existingUser) {
-                throw new BadRequestException("Email is already taken!");
+                return new BadRequestException("Email is already taken!");
             }
 
             // Step 3: Hash the password
@@ -151,14 +159,17 @@
             }
             catch (Exception $e) {
                 $this->db->getConnection()->rollBack();
-                throw $e;
+                return $e;
             }
 
             // Step 5: Generate JWT token
             $user = $this->userRepository->findByEmail($email);
             $userId =$user["id"];
             $role = $this->userGroupRepository->getRoleByUserId($userId);
-            $token = $this->generateToken($userId, $role);
+            $user = $this->userRepository->find($userId);
+            $email = $user["email"];
+            $first_name = $user["first_name"];
+            $token = $this->generateToken($userId, $role, $email, $first_name);
 
             setcookie('token', $token, [
                     'httpOnly' => true,
@@ -172,9 +183,8 @@
             $otp = $this->generateOtp();
             $this->userRepository->saveOtpForUser($userId, $otp);
 
-            // Send email
+            // Step 7: Send email
             if ($this->emailManager->sendOtpEmail($email,$otp)){
-                // Step 7: Return successfull message
                 return  ["message" => "Account created successfully! Please check your email to signin with OTP."];            
             }
         }
@@ -184,7 +194,7 @@
             $user = $this->userRepository->findByEmail($email);
 
             if (!$user) {
-                throw new NotFoundException("Your email was incorrect. Please try again.");
+                return new NotFoundException("Your email was incorrect. Please try again.");
             }
 
             // Generate a new temporary password
@@ -198,6 +208,65 @@
                     return ["message" => "A new password has been sent to your email"];
                 }
             }
+        }
+
+        public function get_user_account($userId){
+            return $this->userRepository->find($userId);
+        }
+
+        public function update_account($userId, $first_name, $middle_name, $last_name, $newPassword, $retypePassword, $phone){
+            
+            if (($newPassword !== "") && ($retypePassword !== "")){
+                // Step 1: Check if passwords are same
+                if ($newPassword !== $retypePassword){
+                    return new BadRequestException("Passwords don't match!");
+                }
+
+            
+                // Step 2: Hash the password
+                $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+
+                // Step 4: Update the user in the database
+                $this->userRepository->update($userId, 
+                [
+                    "first_name" => $first_name, 
+                    "middle_name" => $middle_name, 
+                    "last_name" => $last_name,
+                    "password" => $hashedPassword,
+                    "phone" => $phone
+                ]);
+            }
+            else { 
+                $this->userRepository->update($userId, 
+                [
+                    "first_name" => $first_name, 
+                    "middle_name" => $middle_name, 
+                    "last_name" => $last_name,
+                    "phone" => $phone
+                ]);
+            }
+
+            // Step 5: Generate JWT token
+            $role = $this->userGroupRepository->getRoleByUserId($userId);
+            $user = $this->userRepository->find($userId);
+            $email = $user["email"];
+            $token = $this->generateToken($userId, $role, $email, $first_name);
+
+            setcookie('token', $token, [
+                'httpOnly' => true,
+                'secure' => true,
+                'sameSite' => 'Lax',
+                'path' => '/',
+                'expires' => time() + 3600,
+            ]);
+
+            return [
+                "id"=>$userId, 
+                "role"=>$role, 
+                "email"=>$email, 
+                "first_name"=>$first_name,
+                "message" => "Your account settings have been successfully updated!"
+            ];
         }
     }
 ?>

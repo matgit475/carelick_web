@@ -1,6 +1,6 @@
 {
-  "name": "engineering-web-calculators-client",
-  "version": "1.0.0",
+  "name": "carelick-family-client",
+  "version": "1.0.1",
   "description": "Carelich Family Client",
   "main": "index.js",
   "scripts": {

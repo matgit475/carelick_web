@@ -1,9 +1,16 @@
-:root {
-  --pink: #de3163;
+﻿:root {
+  --pink: #e91e63;
+  --pink-hover: #d81b60;
+  --pink-active: #c2185b;
+
   --grey: #6c757d;
   --white: #ffffff;
   --bg: #f8f9fa; /* This is the bg-light Bootstrap color */
   --dark: #212529;
+}
+
+.dropdown-menu {
+  --bs-dropdown-link-active-bg: var(--pink);
 }
 
 html {
@@ -16,6 +23,7 @@ html {
 body {
   background-color: var(--bg);
   min-height: 100vh;
+  min-width: 786px;
 }
 
 h3 {
@@ -55,7 +63,7 @@ h3 {
 #hero {
   background:
     linear-gradient(to right, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.4)),
-    url("http://192.168.170.3/carelick_web/server/photos/canada-3290310_1280.jpg");
+    url("http://localhost/images.php?path=canada-3290310_1280.jpg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -96,14 +104,42 @@ h3 {
   border-color: var(--pink) !important;
 }
 
-.btn-outline-primary {
-  border-color: var(--pink) !important; /* Red border */
-  color: var(--pink) !important; /* Red text */
+/* Hover */
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: var(--pink-hover) !important;
+  border-color: var(--pink-hover) !important;
 }
 
-.btn-outline-primary:hover {
-  background-color: var(--pink) !important; /* Red background on hover */
-  color: var(--white) !important; /* White text on hover */
+/* Active / Click */
+.btn-primary:active,
+.btn-primary.active,
+.show > .btn-primary.dropdown-toggle {
+  background-color: var(--pink-active) !important;
+  border-color: var(--pink-active) !important;
+}
+
+.btn-outline-primary {
+  background-color: white !important;
+  border-color: var(--pink) !important;
+  color: var(--pink) !important;
+}
+
+/* Hover */
+.btn-outline-primary:hover,
+.btn-outline-primary:focus {
+  background-color: var(--pink-hover) !important;
+  border-color: var(--pink-hover) !important;
+  color: white !important;
+}
+
+/* Active / Click */
+.btn-outline-primary:active,
+.btn-outline-primary.active,
+.show > .btn-primary.dropdown-toggle {
+  background-color: var(--pink-active) !important;
+  border-color: var(--pink-active) !important;
+  color: white;
 }
 
 p {
@@ -316,4 +352,67 @@ section .wave span:nth-child(3) {
   color: white;
   font-size: 48px; /* large text */
   font-weight: bold;
+}
+
+/*********************************************/
+/* Make the dropdown menu absolute and on top*/
+/*********************************************/
+
+.absolute-dropdown .dropdown-menu {
+  position: absolute !important;
+  top: 100%; /* directly below the toggle button */
+  right: 0; /* align to right edge */
+  left: auto; /* override Bootstrap default */
+  z-index: 1050; /* ensure it�s above other elements */
+}
+
+/********************************************/
+/* Styling the Header Profile */
+/****************************************/
+.dropdown-profile-toggle {
+  white-space: normal !important;
+  align-items: flex-start !important;
+}
+
+.dropdown-profile-toggle .profile-info {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.profile-name {
+  font-weight: 600;
+}
+
+.profile-role {
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.profile-email {
+  font-size: 0.8rem;
+  color: #777;
+}
+.dropdown-profile-toggle::after {
+  margin-top: 20px;
+  margin-left: 20px;
+}
+
+.form-control:focus {
+  border-color: var(--pink); /* pink */
+  box-shadow: none;
+}
+
+.form-control {
+  box-shadow: none;
+}
+
+/**************************************/
+/*    Close Button Boundary Reset     */
+/**************************************/
+
+.btn-close {
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
 }

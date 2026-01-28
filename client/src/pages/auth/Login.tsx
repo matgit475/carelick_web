@@ -9,32 +9,32 @@ import Animate from "../../components/Animate";
 const Login = () => {
   const { showPassword, togglePasswordVisibility } = useToggleVisibility();
 
-  const { error, loading, formData, handleChange, handleSubmit } =
+  const { values, isSubmitting, errorMessage, handleChange, handleSubmit } =
     useLoginForm();
 
   return (
     <Row className="justify-content-center w-100">
       <Col xs={12} md={8} lg={6} xl={6} xxl={4}>
-        <Animate>
+        <Animate duration={0.5} y={25}>
           <Card>
             <Card.Body className="p-5">
               <h3 className="text-center mb-4">Welcome</h3>
               <p className="text-center">Let's go to platform</p>
-              <DangerAlert error={error} />
+              <DangerAlert message={errorMessage} />
               <Form
                 onSubmit={handleSubmit}
                 autoComplete="on"
                 method="post"
                 noValidate
               >
-                <Form.Group controlId="formEmail" className="mb-3">
+                <Form.Group controlId="formUsername" className="mb-3">
                   <Form.Label>User email</Form.Label>
                   <Form.Control
                     type="email"
                     name="username"
                     autoComplete="username"
                     placeholder="Enter email"
-                    value={formData.username}
+                    value={values?.username}
                     onChange={handleChange}
                     autoFocus
                   />
@@ -46,7 +46,7 @@ const Login = () => {
                     name="password"
                     autoComplete="current-password"
                     placeholder="Password"
-                    value={formData.password}
+                    value={values?.password}
                     onChange={handleChange}
                   />
                 </Form.Group>
@@ -75,10 +75,10 @@ const Login = () => {
                   <Button
                     variant="primary"
                     type="submit"
-                    disabled={loading}
+                    disabled={isSubmitting}
                     className="w-50"
                   >
-                    {loading ? "Logging in..." : "Login"}
+                    {isSubmitting ? "Logging in..." : "Login"}
                   </Button>
                   <Link to="/auth/register" className="w-50">
                     <Button variant="outline-primary" className="w-100">

@@ -21,12 +21,6 @@ const Footer = () => {
               <Nav.Link as={Link} to="/news" className="p-1">
                 News
               </Nav.Link>
-              <Nav.Link as={Link} to="/" className="p-1">
-                Donations
-              </Nav.Link>
-              <Nav.Link as={Link} to="/" className="p-1">
-                About Us
-              </Nav.Link>
             </Nav>
           </Col>
 

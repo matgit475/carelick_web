@@ -1,23 +1,33 @@
-import * as React from "react";
-import useQueryParams from "../../hooks/useQueryParams";
-import useOtpLogin from "../auth/useOtpLogin";
+import useQueryParams from "../useQueryParams";
 import useForm from "../forms/useForm";
+import { otpLogin } from "../../api/api";
+import { useAuth } from "../../context/auth";
+import { useNavigate } from "react-router-dom";
 
 const useVerifyOtpForm = () => {
-  const { loginUser, error, loading } = useOtpLogin();
+  const { setUser } = useAuth();
+  const navigate = useNavigate();
   const query = useQueryParams();
   const email = query.get("email");
   const initialData = { otp: "", email: email };
-  const { formData, handleChange, handleSubmit } = useForm(
+  const { values, errorMessage, isSubmitting, onChange, onSubmit } = useForm(
     initialData,
-    loginUser,
+    {
+      submit: otpLogin,
+    },
   );
 
+  const handleSubmit = () => {
+    onSubmit().then((user: any) => {
+      setUser(user);
+      user ? navigate("/") : null; // navigates to home
+    });
+  };
   return {
-    error,
-    loading,
-    formData,
-    handleChange,
+    values,
+    errorMessage,
+    isSubmitting,
+    handleChange: onChange,
     handleSubmit,
   };
 };
