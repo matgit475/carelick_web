@@ -10,9 +10,22 @@ import useHome from "../../hooks/public/useHome";
 const Home = () => {
   const navigate = useNavigate();
   let { response } = useHome();
+  const heroImageUrl = `${process.env.REACT_APP_IMAGES_ENDPOINT}canada-3290310_1280.jpg`;
+
   return (
     <>
-      <div id="hero">
+      <div
+        id="hero"
+        style={{
+          background: `linear-gradient(to right, rgba(0,0,0,0.9), rgba(0,0,0,0.4)), url(${heroImageUrl})`,
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          height: "600px",
+          width: "100%",
+          position: "relative",
+        }}
+      >
         <div className="overlay"></div>
         <div className="content">
           <Container>

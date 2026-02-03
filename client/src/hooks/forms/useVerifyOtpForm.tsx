@@ -17,7 +17,8 @@ const useVerifyOtpForm = () => {
     },
   );
 
-  const handleSubmit = () => {
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
     onSubmit().then((user: any) => {
       setUser(user);
       user ? navigate("/") : null; // navigates to home

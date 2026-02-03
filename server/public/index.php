@@ -1,6 +1,6 @@
 <?php
 	// Define the base path
-
+	use Dotenv\Dotenv;
 	define('BASE_PATH', dirname(__DIR__));
 	require BASE_PATH.'/vendor/autoload.php'; // Adjust the path if needed
 	require BASE_PATH.'/app/Helpers/ResponseHelper.php';
@@ -46,8 +46,8 @@
 	require BASE_PATH.'/app/Middleware/LoggingMiddleware.php';
 	require BASE_PATH.'/app/Middleware/CorsMiddleware.php';
 
-	$dotenv = Dotenv\Dotenv::createImmutable(BASE_PATH);
-	$dotenv->load();
+	$env = getenv('APP_ENV');
+	Dotenv::createImmutable(__DIR__, ".env.$env")->load();
 
 	// Dependency Injection Container
 	$container = new Container();

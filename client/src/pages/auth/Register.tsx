@@ -5,11 +5,13 @@ import TermsAndConditionsModal from "../../components/modals/TermsAndConditionsM
 import useRegisterForm from "../../hooks/forms/useRegisterForm";
 import RequiredLabel from "../../components/form/RequiredLabel";
 import DangerAlert from "../../components/alerts/DangerAlert";
+import SuccessAlert from "../../components/alerts/SuccessAlert";
 import validationError from "../../helpers/ValidationError";
 import Animate from "../../components/Animate";
 
 const Register = () => {
   const {
+    successMessage,
     errorMessage,
     fieldErrors,
     values,
@@ -30,6 +32,7 @@ const Register = () => {
               <h3 className="text-center mb-4">Register</h3>
               <p className="text-center">Register the right way</p>
               <DangerAlert message={errorMessage} />
+              <SuccessAlert message={successMessage} />
               <Form onSubmit={handleSubmit} method="post" noValidate>
                 <Row>
                   <Col lg={6}>

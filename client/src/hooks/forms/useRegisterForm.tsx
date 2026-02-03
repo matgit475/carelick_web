@@ -22,6 +22,7 @@ const useRegisterForm = () => {
     onChecked,
     onSubmit,
     onBlur,
+    successMessage,
     isSubmitting,
   } = useForm(initialData, {
     submit: register,
@@ -47,6 +48,7 @@ const useRegisterForm = () => {
     values,
     fieldErrors,
     errorMessage,
+    successMessage,
     isSubmitting,
     handleBlur,
     handleSubmit,

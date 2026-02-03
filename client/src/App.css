@@ -60,18 +60,6 @@ h3 {
 /* Hero Styling*/
 /*************************************/
 
-#hero {
-  background:
-    linear-gradient(to right, rgba(0, 0, 0, 0.9), rgba(0, 0, 0, 0.4)),
-    url("http://localhost/images.php?path=canada-3290310_1280.jpg");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  height: 600px;
-  width: 100%;
-  position: relative;
-}
-
 #hero .overlay {
   position: absolute;
   top: 0;

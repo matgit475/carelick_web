@@ -58,7 +58,7 @@
                 $token = $this->generateToken($userId, $role, $email, $first_name);
                 setcookie('token', $token, [
                     'httpOnly' => true,
-                    'secure' => true,
+                    'secure' => false,
                     'sameSite' => 'Lax',
                     'path' => '/',
                     'expires' => time() + 3600,
@@ -102,7 +102,7 @@
 
                 setcookie('token', $token, [
                     'httpOnly' => true,
-                    'secure' => true,
+                    'secure' => false,
                     'sameSite' => 'Lax',
                     'path' => '/',
                     'expires' => time() + 3600,
@@ -118,7 +118,7 @@
             setcookie('token', '', [
                 'expires' => time() - 3600,
                 'path' => '/',
-                'secure' => true,
+                'secure' => false,
                 'httponly' => true,
                 'samesite' => 'Lax'
             ]);
@@ -145,9 +145,14 @@
                 $this->db->getConnection()->beginTransaction();
                 $data = [
                     "email"=>$email,
+                    "ip_address"=>$_SERVER['REMOTE_ADDR'],
+                    "username"=>$email,
                     "password"=>$hashedPassword,
+                    "salt"=>"",
                     "first_name"=>$firstName,
-                    "last_name"=>$lastName
+                    "last_name"=>$lastName,
+                    "auth_token"=>"",
+                    "created_on"=>time()
                 ];
                 $userId= $this->userRepository->create($data);
                 $data = [
@@ -172,12 +177,12 @@
             $token = $this->generateToken($userId, $role, $email, $first_name);
 
             setcookie('token', $token, [
-                    'httpOnly' => true,
-                    'secure' => true,
-                    'sameSite' => 'Lax',
-                    'path' => '/',
-                    'expires' => time() + 3600,
-                ]);
+                'httpOnly' => true,
+                'secure' => false,
+                'sameSite' => 'Lax',
+                'path' => '/',
+                'expires' => time() + 3600,
+            ]);
 
             // Step 6: Ideally, generate and store real OTP here
             $otp = $this->generateOtp();
@@ -254,7 +259,7 @@
 
             setcookie('token', $token, [
                 'httpOnly' => true,
-                'secure' => true,
+                'secure' => false,
                 'sameSite' => 'Lax',
                 'path' => '/',
                 'expires' => time() + 3600,
