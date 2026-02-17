@@ -46,29 +46,5 @@
             ResponseHelper::res($result);           
         }
 
-        public function account($request){
-                $view = $_GET['view'];
-                $userId = UserContext::getInstance()->getUser()["id"];
-                if ($view == "basic") {
-                    $result =  UserContext::getInstance()->getUser();
-                }
-                else $result = $this->authService->get_user_account($userId);
-                ResponseHelper::res($result);
-        }
-
-
-
-        public function update_account($request){
-            $firstName = trim($request['body']['first_name']);
-            $middleName = trim($request['body']['middle_name']);
-            $lastName = trim($request['body']['last_name']);
-            $newPassword = trim($request['body']['newPassword'] ?? '');
-            $retypePassword = trim($request['body']['retypePassword'] ?? '');
-            $phone = trim($request['body']['phone']);
-
-            $userId = UserContext::getInstance()->getUser()["id"];
-            $result = $this->authService->update_account($userId, $firstName, $middleName, $lastName, $newPassword, $retypePassword, $phone);
-            ResponseHelper::res($result);
-        }
     }
 ?>

@@ -6,11 +6,7 @@ import { Outlet } from "react-router-dom";
 const AuthLayout = () => {
   return (
     <section>
-      <div className="wave">
-        <span></span>
-        <span></span>
-        <span></span>
-      </div>
+      <div className="wave"></div>
       <Header expand="lg">
         <Logo />
         <Navigation />

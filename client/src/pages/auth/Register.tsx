@@ -28,7 +28,7 @@ const Register = () => {
       <Col xs={12} md={8} lg={8} xl={6} xxl={6}>
         <Animate duration={0.5} y={25}>
           <Card>
-            <Card.Body className="p-5">
+            <Card.Body className="p-4">
               <h3 className="text-center mb-4">Register</h3>
               <p className="text-center">Register the right way</p>
               <DangerAlert message={errorMessage} />
@@ -131,12 +131,12 @@ const Register = () => {
                 </Row>
                 <Form.Group controlId="formBasicCheckbox">
                   <Form.Check
-                    id="accept-terms-checkbox"
+                    id="termsAccepted"
                     name="termsAccepted"
                     type="checkbox"
                     className="mb-3 d-inline"
                     checked={values?.termsAccepted}
-                    onChange={handleChecked}
+                    onMouseDown={handleChecked}
                     onBlur={handleBlur}
                   />
                   <label
@@ -161,7 +161,7 @@ const Register = () => {
                     {isSubmitting ? "Registering..." : "Register"}
                   </Button>
                   <Link to="/auth/login" className="w-50">
-                    <Button variant="outline-primary" className="w-100">
+                    <Button variant="light" className="w-100">
                       Login
                     </Button>
                   </Link>

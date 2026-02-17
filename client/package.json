@@ -6,6 +6,7 @@
   "scripts": {
     "build:prod": "webpack --env production=true",
     "start:dev": "prettier --write . && webpack serve --env production=false --port 4000",
+    "format": "prettier --write .",
     "start:prod": "prettier --write . && webpack serve --env production=true --host 0.0.0.0 --port 4010"
   },
   "author": "Muhammad Sumair Dagiya",

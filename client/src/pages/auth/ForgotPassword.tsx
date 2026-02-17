@@ -21,7 +21,7 @@ const ForgotPassword = () => {
       <Col xs={12} md={8} lg={6} xl={6} xxl={4}>
         <Animate duration={0.5} y={25}>
           <Card>
-            <Card.Body className="p-5">
+            <Card.Body className="p-4">
               <h3 className="text-center mb-4">Forgot Password</h3>
               <p className="text-center">
                 A new password will be sent to your registered email
@@ -55,7 +55,7 @@ const ForgotPassword = () => {
                     {isSubmitting ? "Sending..." : "Send"}
                   </Button>
                   <Link to="/auth/login" className="w-50">
-                    <Button variant="outline-primary" className="w-100">
+                    <Button variant="light" className="w-100">
                       Cancel
                     </Button>
                   </Link>

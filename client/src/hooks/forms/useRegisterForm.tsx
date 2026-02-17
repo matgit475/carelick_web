@@ -30,6 +30,8 @@ const useRegisterForm = () => {
   });
 
   const handleAccept = () => {
+    const checkboxElement = document.getElementsByName("termsAccepted")[0];
+    checkboxElement.focus();
     check("termsAccepted");
   };
 

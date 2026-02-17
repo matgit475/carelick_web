@@ -92,7 +92,10 @@ const useForm = (
     const { name, checked } = e.target;
     setState((prevState) => ({
       ...prevState,
-      values: { ...prevState.values, [name]: checked },
+      values: {
+        ...prevState.values,
+        [name]: !prevState.values[name],
+      },
     }));
   };
 

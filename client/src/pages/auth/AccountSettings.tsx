@@ -28,7 +28,7 @@ const AccountSettings = () => {
       <Col xs={12} md={12} lg={12} xl={8} xxl={6}>
         <Animate duration={0.5} y={25}>
           <Card>
-            <Card.Body className="p-5">
+            <Card.Body className="p-4">
               <h3 className="text-center mb-4">User Account Settings</h3>
               <p className="text-center">
                 Here you can change your user account related settings

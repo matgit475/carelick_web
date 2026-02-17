@@ -17,7 +17,7 @@ const Login = () => {
       <Col xs={12} md={8} lg={6} xl={6} xxl={4}>
         <Animate duration={0.5} y={25}>
           <Card>
-            <Card.Body className="p-5">
+            <Card.Body className="p-4">
               <h3 className="text-center mb-4">Welcome</h3>
               <p className="text-center">Let's go to platform</p>
               <DangerAlert message={errorMessage} />
@@ -81,7 +81,7 @@ const Login = () => {
                     {isSubmitting ? "Logging in..." : "Login"}
                   </Button>
                   <Link to="/auth/register" className="w-50">
-                    <Button variant="outline-primary" className="w-100">
+                    <Button variant="light" className="w-100">
                       Register
                     </Button>
                   </Link>

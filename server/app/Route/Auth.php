@@ -1,14 +1,6 @@
 
 <?php
-
 	use Respect\Validation\Validator as v;
-
-	$account_schema = [
-			'first_name' => v::notEmpty()->setName('First Name'),
-			'last_name' => v::notEmpty()->setName('Last Name'),
-			'newPassword' => v::notEmpty()->length(5, null)->setName('New Password'),
-			'retypePassword' => v::notEmpty()->length(5, null)->setName('Retype Password')
-	];
 
 	$register_schema = [
 			'firstName' => v::notEmpty()->setName('First Name'),
@@ -29,23 +21,6 @@
 				->setTemplate('You must accept the terms and conditions.')
 				->setName('Terms Accepted'),
 		];
-
-	$router->addRoute("GET", "/account", AuthController::class, "account", [
-		JWTAuthMiddleware::class,
-		LoggingMiddleware::class
-	]);
-
-	$router->addRoute("POST", "/update_account", AuthController::class, "update_account", [
-		JWTAuthMiddleware::class,
-		LoggingMiddleware::class,
-		[FormValidationMiddleware::class, $account_schema]
-	]);
-
-	$router->addRoute("POST", "/account/field/validate", AuthController::class, "update_account", [
-		JWTAuthMiddleware::class,
-		LoggingMiddleware::class,
-		[FieldValidationMiddleware::class, $account_schema]
-	]);
 
 	$router->addRoute("POST", "/login-with-otp", AuthController::class, "login_with_otp", [
 		LoggingMiddleware::class
@@ -69,6 +44,6 @@
 		[ FieldValidationMiddleware::class, $register_schema ]
 	]);
 
-	$router->addRoute("POST", "/forgot_password", AuthController::class, "forgot_password",[
+	$router->addRoute("POST", "/forgot_password", AuthController::class, "forgot_password", [
 		LoggingMiddleware::class
 	]);

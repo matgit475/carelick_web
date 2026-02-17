@@ -2,7 +2,7 @@
     use Firebase\JWT\JWT;
     use Firebase\JWT\Key;
 
-    class WebsiteService{
+    class PublicService{
         private $newsRepository;
         private $eventRepository;
         private $eventGalleryRepository;
@@ -22,19 +22,19 @@
         }
         
         public function events(){
-            return array_map([$this, 'normalizeEventImage'], $this->eventRepository->getAllEvents());
+            return array_map([$this, 'normalizeEventImage'], $this->eventRepository->getEvents());
         }
 
         public function home() {
             return [
-                "news"=> $this->newsRepository->getAllActiveNews(), 
+                "news"=> $this->newsRepository->getActiveNews(), 
                 "past_events"=>$this->eventRepository->getPastEvents(),
                 "upcomming_events"=>$this->eventRepository->getUpcommingEvents()
             ];
         }
 
         public function news(){
-            return $this->newsRepository->getAllActiveNews();
+            return $this->newsRepository->getActiveNews();
         }
 
         public function event($id){

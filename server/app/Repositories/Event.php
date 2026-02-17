@@ -7,7 +7,7 @@
             $this->db = $database->getConnection();
         }
 
-        public function getAllEvents(){
+        public function getEvents(){
             $stmt = $this->db->query("SELECT * FROM events ORDER BY event_duration_from DESC");
             return $stmt->fetchAll();
         }

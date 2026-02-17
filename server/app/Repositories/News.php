@@ -6,7 +6,7 @@
             $this->db = $database->getConnection();
         }
 
-        public function getAllActiveNews() {
+        public function getActiveNews() {
             $query = "SELECT * FROM news WHERE is_active = 3 ORDER BY creation_time DESC";
             $stmt = $this->db->prepare($query);
             $stmt->execute();

@@ -1,7 +1,9 @@
 <?php
 	// Define the base path
 	use Dotenv\Dotenv;
+
 	define('BASE_PATH', dirname(__DIR__));
+
 	require BASE_PATH.'/vendor/autoload.php'; // Adjust the path if needed
 	require BASE_PATH.'/app/Helpers/ResponseHelper.php';
 	require BASE_PATH.'/app/Helpers/AuthorizeHelper.php';
@@ -19,7 +21,7 @@
 	require BASE_PATH.'/app/Service/BaseService.php';
 	require BASE_PATH.'/app/Service/MemberService.php';
 	require BASE_PATH.'/app/Service/UserService.php';
-	require BASE_PATH.'/app/Service/WebsiteService.php';
+	require BASE_PATH.'/app/Service/PublicService.php';
 
 	require BASE_PATH.'/app/Repositories/Base.php';
 	require BASE_PATH.'/app/Repositories/User.php';
@@ -67,14 +69,14 @@
 	$container->set(AuthService::class, new AuthService($container->get(UserRepository::class), $container->get(MemberRepository::class), $container->get(UserGroupRepository::class), $container->get(EmailManager::class),$container->get(Database::class)));
 	$container->set(PaymentService::class, new PaymentService());
 	$container->set(MemberService::class, new MemberService($container->get(MemberRepository::class)));
-	$container->set(UserService::class, new UserService($container->get(UserRepository::class)));
-	$container->set(WebsiteService::class, new WebsiteService($container->get(NewsRepository::class),$container->get(EventRepository::class),$container->get(EventGalleryRepository::class)));
+	$container->set(UserService::class, new UserService($container->get(UserRepository::class),$container->get(UserGroupRepository::class), $container->get(AuthService::class)));
+	$container->set(PublicService::class, new PublicService($container->get(NewsRepository::class),$container->get(EventRepository::class),$container->get(EventGalleryRepository::class)));
 
 	$container->set(AuthController::class, new AuthController($container->get(AuthService::class)));
 	$container->set(PaymentController::class, new PaymentController($container->get(PaymentService::class)));
 	$container->set(MemberController::class, new MemberController($container->get(MemberService::class)));
 	$container->set(UserController::class, new UserController($container->get(UserService::class)));
-	$container->set(WebsiteController::class, new WebsiteController($container->get(WebsiteService::class)));
+	$container->set(WebsiteController::class, new WebsiteController($container->get(PublicService::class)));
 
 	// Initialize Router with DI container
 	$router = new Router($container);

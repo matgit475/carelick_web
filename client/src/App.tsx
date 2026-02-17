@@ -18,6 +18,7 @@ import {
   Dashboard,
   AccountSettings,
 } from "./pages";
+import BackToTop from "./components/BackToTop";
 
 function App() {
   useScrollToTop();
@@ -25,28 +26,31 @@ function App() {
   const isAdmin = user && user?.role === "admin";
 
   return (
-    <Routes>
-      <Route path="/">
-        <Route path="/" element={<PublicLayout />}>
-          <Route index element={<Home />} />
-          <Route path="news" element={<News />} />
-          <Route path="events" element={<Events />} />
-          <Route path="event/:id" element={<Event />} />
-        </Route>
-        <Route path="/auth" element={<AuthLayout />}>
-          <Route path="login" element={<Login />} />
-          <Route path="forgot-password" element={<ForgotPassword />} />
-          <Route path="register" element={<Register />} />
-          <Route path="verify-otp" element={<VerifyOtp />} />
-        </Route>
-        {isAdmin && (
-          <Route path="/admin-portal" element={<PortalLayout />}>
-            <Route path="dashboard" element={<Dashboard />} />
-            <Route path="account-settings" element={<AccountSettings />} />
+    <>
+      <Routes>
+        <Route path="/">
+          <Route path="/" element={<PublicLayout />}>
+            <Route index element={<Home />} />
+            <Route path="news" element={<News />} />
+            <Route path="events" element={<Events />} />
+            <Route path="event/:id" element={<Event />} />
           </Route>
-        )}
-      </Route>
-    </Routes>
+          <Route path="/auth" element={<AuthLayout />}>
+            <Route path="login" element={<Login />} />
+            <Route path="forgot-password" element={<ForgotPassword />} />
+            <Route path="register" element={<Register />} />
+            <Route path="verify-otp" element={<VerifyOtp />} />
+          </Route>
+          {isAdmin && (
+            <Route path="/admin-portal" element={<PortalLayout />}>
+              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="account-settings" element={<AccountSettings />} />
+            </Route>
+          )}
+        </Route>
+      </Routes>
+      <BackToTop />
+    </>
   );
 }
 

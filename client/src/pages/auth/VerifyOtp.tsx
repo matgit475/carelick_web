@@ -13,7 +13,7 @@ const VerifyOtp = () => {
       <Col xs={12} md={8} lg={6} xl={6} xxl={4}>
         <Animate duration={0.5}>
           <Card>
-            <Card.Body className="p-5">
+            <Card.Body className="p-4">
               <h3 className="text-center mb-4">Login with OTP</h3>
               <p className="text-center">
                 Login with the OTP send to your email

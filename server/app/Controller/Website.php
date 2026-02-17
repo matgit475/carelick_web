@@ -1,28 +1,28 @@
 <?php
     class WebsiteController{
-        private $websiteService;
-        public function __construct(WebsiteService $service) {
-            $this->websiteService = $service;
+        private $service;
+        public function __construct(PublicService $service) {
+            $this->service = $service;
         }
 
         public function events($request){
-            $result = $this->websiteService->events();
+            $result = $this->service->events();
             ResponseHelper::res($result);
         }
 
         public function home($request){
-            $result = $this->websiteService->home();
+            $result = $this->service->home();
             ResponseHelper::res($result);
         }
 
         public function news($request){
-            $result = $this->websiteService->news();
+            $result = $this->service->news();
             ResponseHelper::res($result);
         }
 
         public function event($request){
             $id = $request['params']['id'];
-            $result = $this->websiteService->event($id);
+            $result = $this->service->event($id);
             ResponseHelper::res($result);
         }
     }

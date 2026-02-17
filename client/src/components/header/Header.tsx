@@ -21,7 +21,7 @@ const LogInButtons = () => (
       <Button variant="primary">Login</Button>
     </Link>
     <Link to="/auth/register">
-      <Button variant="outline-primary">Register</Button>
+      <Button variant="light">Register</Button>
     </Link>
   </>
 );
@@ -32,16 +32,16 @@ const LogOutButton = () => {
   const { logoutUser, error, loading } = useLogout();
   return (
     <>
-      <Button variant="primary" onClick={logoutUser}>
-        {loading ? "Logging Out..." : "Logout"}
-      </Button>
       <Button
-        variant="outline-primary"
+        variant="light"
         onClick={() =>
           user.role === "admin" ? navigate("/admin-portal/dashboard") : null
         }
       >
         Portal
+      </Button>
+      <Button variant="primary" onClick={logoutUser}>
+        {loading ? "Logging Out..." : "Logout"}
       </Button>
     </>
   );
@@ -94,6 +94,7 @@ export const MobileMenu = () => {
               onClick={() => {
                 if (user?.role === "admin") {
                   navigate("/admin-portal/dashboard");
+                  setShow(false);
                 }
               }}
             >
@@ -102,6 +103,22 @@ export const MobileMenu = () => {
                 Dashboard
               </span>
 
+              <FiChevronRight size={18} />
+            </ListGroup.Item>
+
+            {/* Account Settings Link */}
+            <ListGroup.Item
+              action
+              className={`d-flex align-items-center justify-content-between`}
+              onClick={() => {
+                navigate("/admin-portal/account-settings");
+                setShow(false);
+              }}
+            >
+              <span className="d-flex align-items-center gap-2">
+                <FiSettings size={18} />
+                Account Settings
+              </span>
               <FiChevronRight size={18} />
             </ListGroup.Item>
 
@@ -153,7 +170,7 @@ export const ProfileMenu = () => {
   const { logoutUser } = useLogout();
   const navigate = useNavigate();
   return (
-    <Nav className="ms-auto">
+    <Nav className="ms-auto d-none d-md-block">
       <Dropdown className="absolute-dropdown me-3" align="end">
         <Dropdown.Toggle
           variant="light"
