@@ -13,10 +13,9 @@ const MemberPortalLayout = () => {
       <Header expand={false} containerClassName={"justify-content-start"}>
         <MobileMenu />
         <Logo />
-              <ProfileMenu />
-              
-          </Header>
-          <RegistrationAlert />
+        <ProfileMenu />
+      </Header>
+      <RegistrationAlert />
       <Outlet />
     </div>
   );
