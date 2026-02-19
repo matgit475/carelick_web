@@ -23,14 +23,15 @@
 
         private static $secret_key = "1234567890qwertyuiopasdfghjklzxcvbnm"; // Keep this secret & secure
 
-        public static function generateToken($userId, $role, $email, $first_name) {
+        public static function generateToken($userId, $role, $email, $first_name, $account_verified) {
             $payload = [
                 "iat" => time(),            // Issued at
                 "exp" => time() + 3600,     // Expiry (1 hour)
                 "sub" => $userId,           // User ID
                 "role" => $role,
                 "email"=> $email,
-                "first_name"=> $first_name
+                "first_name"=> $first_name,
+                "account_verified"=> $account_verified
             ];
             return JWT::encode($payload, self::$secret_key, 'HS256');
         }
@@ -52,10 +53,11 @@
                 $user = $this->userRepository->find($userId);
                 $email = $user["email"];
                 $first_name = $user["first_name"];
+                $account_verified = $user["account_verified"];
                 
                 $this->userRepository->markEmailVerified($userId);
 
-                $token = $this->generateToken($userId, $role, $email, $first_name);
+                $token = $this->generateToken($userId, $role, $email, $first_name, $account_verified);
                 setcookie('token', $token, [
                     'httpOnly' => true,
                     'secure' => false,
@@ -98,7 +100,8 @@
                 $user = $this->userRepository->find($userId);
                 $email = $user["email"];
                 $first_name = $user["first_name"];
-                $token = $this->generateToken($userId, $role, $email, $first_name);
+                $account_verified = $user["account_verified"];
+                $token = $this->generateToken($userId, $role, $email, $first_name, $account_verified);
 
                 setcookie('token', $token, [
                     'httpOnly' => true,
@@ -174,7 +177,8 @@
             $user = $this->userRepository->find($userId);
             $email = $user["email"];
             $first_name = $user["first_name"];
-            $token = $this->generateToken($userId, $role, $email, $first_name);
+            $account_verified = $user["account_verified"];
+            $token = $this->generateToken($userId, $role, $email, $first_name, $account_verified);
 
             setcookie('token', $token, [
                 'httpOnly' => true,

@@ -10,7 +10,7 @@ const VerifyOtp = () => {
 
   return (
     <Row className="justify-content-center w-100">
-      <Col xs={12} md={8} lg={6} xl={6} xxl={4}>
+      <Col xs={12} md={6} lg={6} xl={4} xxl={4}>
         <Animate duration={0.5}>
           <Card>
             <Card.Body className="p-4">

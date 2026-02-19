@@ -24,7 +24,7 @@ const AccountSettings = () => {
   } = form;
 
   return (
-    <Row className="justify-content-center p-5" style={{ marginTop: "100px" }}>
+    <Row className="justify-content-center p-3">
       <Col xs={12} md={12} lg={12} xl={8} xxl={6}>
         <Animate duration={0.5} y={25}>
           <Card>

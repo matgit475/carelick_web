@@ -38,7 +38,7 @@ const useRegisterForm = () => {
   const handleSubmit = (e: any) => {
     e.preventDefault();
     onSubmit().then((user: any) => {
-      setUser(user);
+      if (user) setUser(user);
     });
   };
 

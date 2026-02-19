@@ -20,7 +20,7 @@ html {
 /**************************************/
 
 body {
-  background-color: var(--bg);
+  background-color: var(--white);
   min-height: 100vh;
   min-width: 565px;
 }
@@ -64,15 +64,14 @@ h3 {
   top: 0;
   left: 0;
   width: 100%;
-  min-height: 100vh;
+  min-height: calc(100vh - 100px);
   z-index: 1;
 }
 
 #hero .content {
-  padding-top: 85px;
   top: 0;
   left: 0;
-  min-height: 100vh;
+  min-height: calc(100vh - 100px);
   color: white;
   z-index: 2;
   display: flex;
@@ -180,28 +179,6 @@ p {
   color: var(--pink);
 }
 
-/*************************************************************************/
-/* Auth Wavy Section from https://prismic.io/blog/css-background-effects */
-/*************************************************************************/
-section {
-  position: relative;
-  width: 100%;
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-section .wave {
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 50%;
-  background: var(--pink);
-  opacity: 0.85;
-}
-
 /**************************************************************/
 /* News Marquee Home Page styling */
 /***************************************************************/
@@ -209,14 +186,6 @@ section .wave {
 .marquee-text:hover {
   color: var(--pink);
   cursor: pointer;
-}
-
-/**************************************************************/
-/* News Container styling */
-/***************************************************************/
-.news-container,
-.events-container {
-  padding-top: 125px;
 }
 
 /*************************************************************/
@@ -376,17 +345,32 @@ section .wave {
 /*************************************/
 
 @keyframes bounce {
-    0%, 20%, 50%, 80%, 100%
-
-{
+  0%,
+  20%,
+  50%,
+  80%,
+  100% {
     transform: translateX(-50%) translateY(0);
-}
+  }
 
-40% {
+  40% {
     transform: translateX(-50%) translateY(-10px);
+  }
+
+  60% {
+    transform: translateX(-50%) translateY(-5px);
+  }
 }
 
-60% {
-    transform: translateX(-50%) translateY(-5px);
+.background {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
+
+.content {
+  flex: 1; /* take remaining height */
+  display: flex;
+  justify-content: center; /* horizontal center */
+  align-items: center; /* vertical center */
 }

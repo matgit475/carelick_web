@@ -2,7 +2,8 @@ import * as React from "react";
 import { Route, Routes } from "react-router-dom";
 import PublicLayout from "./layouts/PublicLayout";
 import AuthLayout from "./layouts/AuthLayout";
-import PortalLayout from "./layouts/PortalLayout";
+import AdminPortalLayout from "./layouts/AdminPortalLayout";
+import MemberPortalLayout from "./layouts/MemberPortalLayout";
 import useScrollToTop from "./hooks/useScrollToTop";
 import { useAuth } from "./context/auth";
 
@@ -24,6 +25,7 @@ function App() {
   useScrollToTop();
   const { user } = useAuth();
   const isAdmin = user && user?.role === "admin";
+  const isMember = user && user?.role === "members";
 
   return (
     <>
@@ -42,7 +44,13 @@ function App() {
             <Route path="verify-otp" element={<VerifyOtp />} />
           </Route>
           {isAdmin && (
-            <Route path="/admin-portal" element={<PortalLayout />}>
+            <Route path="/admin-portal" element={<AdminPortalLayout />}>
+              <Route path="dashboard" element={<Dashboard />} />
+              <Route path="account-settings" element={<AccountSettings />} />
+            </Route>
+          )}
+          {isMember && (
+            <Route path="/member-portal" element={<MemberPortalLayout />}>
               <Route path="dashboard" element={<Dashboard />} />
               <Route path="account-settings" element={<AccountSettings />} />
             </Route>

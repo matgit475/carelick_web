@@ -19,7 +19,8 @@
                     "role"=>$decodedToken->role, 
                     "id"=>$decodedToken->sub,
                     "email"=>$decodedToken->email,
-                    "first_name"=>$decodedToken->first_name
+                    "first_name"=>$decodedToken->first_name,
+                    "account_verified"=>$decodedToken->account_verified
                 ];
                 UserContext::getInstance()->setUser($user);
 

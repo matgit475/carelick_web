@@ -6,7 +6,7 @@ import Header, {
   ProfileMenu,
 } from "../components/header/Header";
 
-const PortalLayout = () => {
+const AdminPortalLayout = () => {
   return (
     <div className="background">
       <Header expand={false} containerClassName={"justify-content-start"}>
@@ -19,4 +19,4 @@ const PortalLayout = () => {
   );
 };
 
-export default PortalLayout;
+export default AdminPortalLayout;

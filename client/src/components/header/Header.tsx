@@ -34,9 +34,10 @@ const LogOutButton = () => {
     <>
       <Button
         variant="light"
-        onClick={() =>
-          user.role === "admin" ? navigate("/admin-portal/dashboard") : null
-        }
+        onClick={() => {
+          if (user?.role === "members") navigate("/member-portal/dashboard");
+          else if (user?.role === "admin") navigate("/admin-portal/dashboard");
+        }}
       >
         Portal
       </Button>
@@ -49,6 +50,7 @@ const LogOutButton = () => {
 
 export const LogButtons = () => {
   const { user } = useAuth();
+  console.log("User in LogButtons:", user);
   return (
     <div className="d-flex gap-3 pt-2">
       {user ? <LogOutButton /> : <LogInButtons />}
@@ -92,10 +94,10 @@ export const MobileMenu = () => {
               action
               className={`d-flex align-items-center justify-content-between`}
               onClick={() => {
-                if (user?.role === "admin") {
-                  navigate("/admin-portal/dashboard");
-                  setShow(false);
-                }
+                if (user?.role === "admin") navigate("/admin-portal/dashboard");
+                else if (user?.role === "members")
+                  navigate("/member-portal/dashboard");
+                setShow(false);
               }}
             >
               <span className="d-flex align-items-center gap-2">
@@ -111,7 +113,10 @@ export const MobileMenu = () => {
               action
               className={`d-flex align-items-center justify-content-between`}
               onClick={() => {
-                navigate("/admin-portal/account-settings");
+                if (user?.role === "admin")
+                  navigate("/admin-portal/account-settings");
+                else if (user?.role === "members")
+                  navigate("/member-portal/account-settings");
                 setShow(false);
               }}
             >
@@ -188,7 +193,11 @@ export const ProfileMenu = () => {
           <Dropdown.Item
             onClick={(e) => {
               e.preventDefault();
-              navigate("/admin-portal/account-settings");
+              console.log("User in ProfileMenu:", user);
+              if (user?.role === "admin")
+                navigate("/admin-portal/account-settings");
+              else if (user?.role === "members")
+                navigate("/member-portal/account-settings");
             }}
           >
             <FiSettings size={18} className="me-2" />
@@ -212,11 +221,11 @@ const Header: React.FC<{
 }> = ({ children, expand, containerClassName = "" }) => {
   return (
     <Navbar
-      className="shadow"
+      className="w-100"
       expand={expand}
       bg="white"
       variant="white"
-      fixed="top"
+      sticky="top"
     >
       <Container fluid className={containerClassName}>
         {children}

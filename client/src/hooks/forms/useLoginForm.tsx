@@ -15,8 +15,10 @@ const useLoginForm = () => {
   const handleSubmit = (e: any) => {
     e.preventDefault();
     onSubmit().then((res: any) => {
+      console.log("Login response:", res);
       setUser(res);
-      res?.role == "admin" ? navigate("/admin-portal/dashboard") : null; // navigates to dashoboard on successful login
+      if (res?.role == "admin") navigate("/admin-portal/dashboard");
+      else if (res?.role == "members") navigate("/member-portal/dashboard");
     });
   };
 

@@ -5,16 +5,15 @@ import { Outlet } from "react-router-dom";
 
 const AuthLayout = () => {
   return (
-    <section>
-      <div className="wave"></div>
+    <div className="background">
       <Header expand="lg">
         <Logo />
         <Navigation />
       </Header>
-      <Container className="auth-container d-flex justify-content-center align-items-center">
+      <div className="content">
         <Outlet />
-      </Container>
-    </section>
+      </div>
+    </div>
   );
 };
 

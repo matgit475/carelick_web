@@ -56,7 +56,8 @@
             $role = $this->userGroupRepository->getRoleByUserId($userId);
             $user = $this->find($userId);
             $email = $user["email"];
-            $token = $this->authService->generateToken($userId, $role, $email, $first_name);
+            $account_verified = $user["account_verified"];
+            $token = $this->authService->generateToken($userId, $role, $email, $first_name, $account_verified);
 
             setcookie('token', $token, [
                 'httpOnly' => true,
