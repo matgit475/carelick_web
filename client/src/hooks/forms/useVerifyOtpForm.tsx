@@ -20,8 +20,12 @@ const useVerifyOtpForm = () => {
   const handleSubmit = (e: any) => {
     e.preventDefault();
     onSubmit().then((user: any) => {
-      setUser(user);
-      user.role == "members" ? navigate("/member-portal/dashboard") : null; // navigates to home
+      console.log(user);
+      if (user) {
+        setUser(user);
+        user.role == "members" ? navigate("/member-portal/dashboard") : null;
+        user.role == "admin" ? navigate("/admin-portal/dashboard") : null;
+      }
     });
   };
   return {

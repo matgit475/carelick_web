@@ -12,6 +12,7 @@ import {
   FiChevronRight,
   FiHome,
   FiUser,
+  FiUsers,
   FiSettings,
 } from "react-icons/fi";
 
@@ -72,11 +73,17 @@ export const MobileMenu = () => {
   const navigate = useNavigate();
   const location = useLocation(); // get current path
   const { user } = useAuth();
+  const [showUsers, setShowUsers] = React.useState(false);
   const isActive = (path: string) => location.pathname === path;
   const activeClassName = (path: string) =>
     isActive(path) ? "border-start border-3 border-dark" : "";
-  const handleClose = () => setShow(false);
-  const handleShow = () => setShow(true);
+  const handleClose = () => {
+    setShow(false);
+  };
+  const handleShow = () => {
+    setShow(true);
+    setShowUsers(false); // Close Users submenu when closing the main menu
+  };
 
   return (
     <>
@@ -108,6 +115,75 @@ export const MobileMenu = () => {
               <FiChevronRight size={18} />
             </ListGroup.Item>
 
+            {/* Users Link */}
+            {user?.role === "admin" && (
+              <ListGroup.Item
+                action
+                className={`d-flex align-items-center justify-content-between`}
+                onClick={() => {
+                  navigate("/admin-portal/users");
+                  setShow(false);
+                }}
+              >
+                <span className="d-flex align-items-center gap-2">
+                  <FiUsers size={18} />
+                  Users
+                </span>
+
+                <FiChevronRight size={18} />
+              </ListGroup.Item>
+            )}
+
+            {/* USERS (Collapsible - Admin Only) */}
+            {/* }
+            {user?.role === "admin" && (
+              <>
+                <ListGroup.Item
+                  action
+                  className="d-flex align-items-center justify-content-between"
+                  onClick={() => setShowUsers(!showUsers)}
+                >
+                  <span className="d-flex align-items-center gap-2">
+                    <FiUsers size={18} />
+                    Users
+                  </span>
+                  <FiChevronRight
+                    size={18}
+                    style={{
+                      transform: showUsers ? "rotate(90deg)" : "rotate(0deg)",
+                      transition: "0.2s",
+                    }}
+                  />
+                </ListGroup.Item>
+
+                {showUsers && (
+                  <>
+                    <ListGroup.Item
+                      action
+                      className="ps-5 d-flex justify-content-between"
+                      onClick={() => {
+                        navigate("/admin-portal/users/add");
+                        setShow(false);
+                      }}
+                    >
+                      Add User
+                    </ListGroup.Item>
+
+                    <ListGroup.Item
+                      action
+                      className="ps-5 d-flex justify-content-between"
+                      onClick={() => {
+                        navigate("/admin-portal/users/manage");
+                        setShow(false);
+                      }}
+                    >
+                      Manage Users
+                    </ListGroup.Item>
+                  </>
+                )}
+              </>
+            )}*/}
+
             {/* Account Settings Link */}
             <ListGroup.Item
               action
@@ -126,7 +202,6 @@ export const MobileMenu = () => {
               </span>
               <FiChevronRight size={18} />
             </ListGroup.Item>
-
             {/* Logout Link */}
             <ListGroup.Item
               action

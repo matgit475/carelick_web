@@ -46,5 +46,14 @@
             ResponseHelper::res($result);           
         }
 
+        public function reset_password($request){
+            $newPassword = trim($request['body']['newPassword']);
+            $retypePassword = trim($request['body']["retypePassword"]);
+            $token = trim($request['body']['token']);
+
+            $result = $this->authService->reset_password($newPassword, $retypePassword, $token);
+            ResponseHelper::res($result);           
+        }
+
     }
 ?>

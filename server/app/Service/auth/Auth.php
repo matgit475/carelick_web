@@ -43,21 +43,21 @@
         public function loginWithOpt($email, $otp){
             // Query user from database
             $user = $this->userRepository->findByEmail($email);
-
-            if ($user["is_email_verified"]) throw new ConflictException("Email is already verified.");
+            if (!$user) return new NotFoundException("Your email was incorrect. Please try again.");
+            if ($user["is_email_verified"]) return new ConflictException("Email is already verified.");
                 
             // Verify user  with email
-            if ($user && ($otp == $user['last_otp'])) {
+            if ($user && ($otp == $user['activation_code'])) {
                 $userId = $user['id'];
                 $role = $this->userGroupRepository->getRoleByUserId($userId);
                 $user = $this->userRepository->find($userId);
                 $email = $user["email"];
                 $first_name = $user["first_name"];
                 $account_verified = $user["account_verified"];
-                
-                $this->userRepository->markEmailVerified($userId);
 
+                $this->userRepository->markEmailVerified($userId);
                 $token = $this->generateToken($userId, $role, $email, $first_name, $account_verified);
+                
                 setcookie('token', $token, [
                     'httpOnly' => true,
                     'secure' => false,
@@ -66,11 +66,10 @@
                     'expires' => time() + 3600,
                 ]);
 
-                return ["id"=>$userId, "role"=>$role, "email"=>$email, "first_name"=>$first_name];
+                return ["id"=>$userId, "role"=>$role, "email"=>$email, "first_name"=>$first_name, "account_verified"=>$account_verified];
             } else {
                 return new UnauthorizedException("Your OTP was incorrect. Please try again.");
             }
-
         }
 
         public function login($email, $password){
@@ -78,10 +77,27 @@
             // Query user from database
             $user = $this->userRepository->findByEmail($email);
 
-            // Verify Email with OTP
-            if ($user){
-                $userId = $user['id'];
-                if (!$user['is_email_verified']){
+            // Verify password
+            if ($user && password_verify($password, $user['password'])) {
+                 $userId = $user['id'];
+                if ($user['is_email_verified'] == 1){
+                    $role = $this->userGroupRepository->getRoleByUserId($userId);
+                    $user = $this->userRepository->find($userId);
+                    $email = $user["email"];
+                    $first_name = $user["first_name"];
+                    $account_verified = $user["account_verified"];
+                    $token = $this->generateToken($userId, $role, $email, $first_name, $account_verified);
+
+                    setcookie('token', $token, [
+                        'httpOnly' => true,
+                        'secure' => false,
+                        'sameSite' => 'Lax',
+                        'path' => '/',
+                        'expires' => time() + 3600,
+                    ]);
+                    return ["id"=>$userId, "role"=>$role, "email"=>$email, "first_name"=>$first_name];
+                }
+                else{
                     // Ideally, generate and store real OTP here
                     $otp = $this->generateOtp();
                     $this->userRepository->saveOtpForUser($userId, $otp);
@@ -91,27 +107,7 @@
                         return new UnauthorizedException("Your email address is not verified. Please check your inbox to login with OTP.");
                     }
                 }
-            }
 
-            // Verify password
-            if ($user && password_verify($password, $user['password'])) {
-                $userId = $user['id'];
-                $role = $this->userGroupRepository->getRoleByUserId($userId);
-                $user = $this->userRepository->find($userId);
-                $email = $user["email"];
-                $first_name = $user["first_name"];
-                $account_verified = $user["account_verified"];
-                $token = $this->generateToken($userId, $role, $email, $first_name, $account_verified);
-
-                setcookie('token', $token, [
-                    'httpOnly' => true,
-                    'secure' => false,
-                    'sameSite' => 'Lax',
-                    'path' => '/',
-                    'expires' => time() + 3600,
-                ]);
-
-                return ["id"=>$userId, "role"=>$role, "email"=>$email, "first_name"=>$first_name];
             } else {
                 return new UnauthorizedException("Your email or password was incorrect. Please try again.");
             }
@@ -198,9 +194,78 @@
             }
         }
 
+        public function reset_password($newPassword, $retypePassword, $token){
+
+            $user = $this->userRepository->findByResetToken($token);
+            if (!$user) {
+                return new BadRequestException("Invalid token.");
+            }
+
+            if ($newPassword !== $retypePassword){
+                return new BadRequestException("Passwords don't match!");
+            }
+        
+            $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+
+            try {
+                $this->db->getConnection()->beginTransaction();
+
+                // Update password
+                $this->userRepository->update($user["id"], ["password" => $hashedPassword]);
+
+                // Invalidate token (VERY IMPORTANT)
+                $this->userRepository->update($user["id"],["forgotten_password_code" => ""]);
+
+                $this->db->getConnection()->commit();
+
+            } catch (Exception $e) {
+                $this->db->getConnection()->rollBack();
+                return $e;
+            }
+
+            $role = $this->userGroupRepository->getRoleByUserId($user["id"]);
+            $email = $user["email"];
+            $first_name = $user["first_name"];
+            $account_verified = $user["account_verified"];
+            $token = $this->generateToken($user["id"], $role, $email, $first_name, $account_verified);
+
+            setcookie('token', $token, [
+                'httpOnly' => true,
+                'secure' => false,
+                'sameSite' => 'Lax',
+                'path' => '/',
+                'expires' => time() + 3600,
+            ]);
+            return ["id"=>$user["id"], "role"=>$role, "email"=>$email, "first_name"=>$first_name];
+        }
+
         public function forgot_password($email){
+
+            $user = $this->userRepository->findByEmail($email);
+
+            if (!$user) {
+                return new NotFoundException("Your email was incorrect. Please try again.");
+            }
+
+            // Generate a new token 
+            $token = bin2hex(random_bytes(4)); // 8-character random token
+            if ($this->userRepository->update($user["id"],["forgotten_password_code"=>$token, "forgotten_password_time"=> time()])){
+                if ($this->emailManager->sendPasswordResetEmail($email,$token)){
+                    return ["message" => "Check your email to reset your password!"];
+                }
+            };
+
+
+            /*
             // Check if the email exists in database
             $user = $this->userRepository->findByEmail($email);
+
+            $email_verified = $user["is_email_verified"];
+            $active = $user["active"];
+
+             if (!$email_verified && !$active) {
+                return new BadRequestException("Email is not verified. Please verify your email before resetting password.");
+            }
 
             if (!$user) {
                 return new NotFoundException("Your email was incorrect. Please try again.");
@@ -217,6 +282,7 @@
                     return ["message" => "A new password has been sent to your email"];
                 }
             }
+            */
         }
     }
 ?>

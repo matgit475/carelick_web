@@ -38,6 +38,16 @@ export const forgotPassword = async (data: any) => {
   return response.data;
 };
 
+export const resetPassword = async (data: any) => {
+  const response = await API.post("/reset_password", data);
+  return response.data;
+};
+
+export const validateResetPasswordField = async (data: any) => {
+  const response = await API.post("/reset_password/field/validate", data);
+  return response.data;
+};
+
 export const account = (view: any) => API.get(`/account?view=${view}`);
 
 export const validateAccountField = async (data: any) => {
@@ -61,6 +71,11 @@ export const events = async () => {
   return response.data;
 };
 
+export const userStats = async () => {
+  const response = await API.get("/admin/dashboard");
+  return response.data;
+};
+
 export const news = async () => {
   const response = await API.get("/news");
   return response.data;
@@ -68,5 +83,16 @@ export const news = async () => {
 
 export const event = async (id: number | string) => {
   const response = await API.get(`/events/${id}`);
+  return response.data;
+};
+
+//User Management APIs
+export const users = async () => {
+  const response = await API.get("/users");
+  return response.data;
+};
+
+export const deleteUsers = async (data: any) => {
+  const response = await API.delete("/users", { data });
   return response.data;
 };

@@ -14,10 +14,10 @@ class EmailManager {
         return ob_get_clean();
     }
 
-    public function sendPasswordResetEmail(string $email, string $newPassword ): bool {
+    public function sendPasswordResetEmail(string $email, string $token ): bool {
         // Send email with the new password
         $subject = "Password Reset Request";
-        $body = $this->getBody('passwordReset',["email"=>$email, "newPassword"=> $newPassword]);
+        $body = $this->getBody('passwordReset',["email"=>$email, "token"=> $token]);
         return $this->emailService->sendEmail($email, $subject, $body);
     }
 

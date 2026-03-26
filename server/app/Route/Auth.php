@@ -22,6 +22,15 @@
 				->setName('Terms Accepted'),
 		];
 
+		$reset_password_schema = [
+			'token' => v::notEmpty()->setName('Token'),
+			'newPassword' => v::notEmpty()->length(8, null)
+				->setTemplate('Password must be at least 8 characters long.')
+				
+				->setName('New Password'),
+			'retypePassword' => v::notEmpty()->setName('Retype Password')
+		];
+
 	$router->addRoute("POST", "/login-with-otp", AuthController::class, "login_with_otp", [
 		LoggingMiddleware::class
 	]);
@@ -46,4 +55,14 @@
 
 	$router->addRoute("POST", "/forgot_password", AuthController::class, "forgot_password", [
 		LoggingMiddleware::class
+	]);
+
+	$router->addRoute("POST", "/reset_password",  AuthController::class, "reset_password", [
+		LoggingMiddleware::class,
+		[ FormValidationMiddleware::class, $reset_password_schema ]
+	]);
+
+	$router->addRoute("POST", "/reset_password/field/validate", AuthController::class, "reset_password" , [
+		LoggingMiddleware::class,
+		[ FieldValidationMiddleware::class, $reset_password_schema ]
 	]);

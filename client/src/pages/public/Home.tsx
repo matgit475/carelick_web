@@ -52,7 +52,7 @@ const Home = () => {
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
-          minHeight: "calc( 100vh - 100px)",
+          minHeight: "calc( 100vh - 86px)",
           width: "100%",
           position: "relative",
         }}
@@ -67,7 +67,7 @@ const Home = () => {
                 lg={6}
                 xl={6}
                 xxl={6}
-                className="text-center text-lg-start"
+                className="text-center text-lg-start pt-5 pb-5"
               >
                 <Animate>
                   <h1 className="mb-4">Rising the Family</h1>

@@ -7,7 +7,6 @@ import Header, {
 } from "../components/header/Header";
 import RegistrationAlert from "../components/alerts/RegistrationAlert";
 const MemberPortalLayout = () => {
-  
   return (
     <div className="background">
       <Header expand={false} containerClassName={"justify-content-start"}>

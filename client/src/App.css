@@ -1,7 +1,7 @@
 ﻿:root {
-  --pink: #e91e63;
-  --pink-hover: #d81b60;
-  --pink-active: #c2185b;
+  --pink: #e79fa0;
+  --pink-hover: #d45f6b;
+  --pink-active: #a8181c;
   --grey: #6c757d;
   --white: #ffffff;
   --bg: #f8f9fa; /* This is the bg-light Bootstrap color */
@@ -198,9 +198,9 @@ p {
 }
 
 .pagination .page-link:hover {
-  background-color: var(--pink);
+  background-color: var(--pink-hover);
   color: white;
-  border-color: var(--pink);
+  border-color: var(--pink-hover);
 }
 
 /* Active pagination item */
@@ -373,4 +373,19 @@ p {
   display: flex;
   justify-content: center; /* horizontal center */
   align-items: center; /* vertical center */
+}
+
+/****************************/
+/*****  Fixed Table *********/
+/****************************/
+.fixed-table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+.fixed-table th,
+.fixed-table td {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }

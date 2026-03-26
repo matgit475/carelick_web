@@ -20,6 +20,25 @@
             return $this->find($userId);
         }
 
+        public function delete($userId){
+            return $this->userRepository->delete($userId);
+        }
+
+        public function getAll() {
+            return $this->userRepository->getAll();
+        }
+
+        public function admin_dashboard(){
+            $totalUsers = $this->userRepository->countAll();
+            $verifiedUsers = $this->userRepository->countByAccountVerified(true);
+            $unverifiedUsers = $this->userRepository->countByAccountVerified(false);
+            return [
+                "total_users" => $totalUsers,
+                "verified_users" => $verifiedUsers,
+                "unverified_users" => $unverifiedUsers
+            ];
+        }
+
         public function update_account($userId, $first_name, $middle_name, $last_name, $newPassword, $retypePassword, $phone){
             
             if (($newPassword !== "") && ($retypePassword !== "")){

@@ -29,4 +29,20 @@
             $result = $this->userService->update_account($userId, $firstName, $middleName, $lastName, $newPassword, $retypePassword, $phone);
             ResponseHelper::res($result);
         }
+
+        public function  getAll($request) {
+            $result = $this->userService->getAll();
+            ResponseHelper::res($result);
+        }
+
+        public function delete($request) {
+            $userId = $request['body']['id'];
+            $result = $this->userService->delete($userId);
+            ResponseHelper::res($result);
+        }
+
+        public function admin_dashboard($request) {
+            $result = $this->userService->admin_dashboard();
+            ResponseHelper::res($result);
+        }
     }

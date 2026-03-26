@@ -22,3 +22,19 @@
 		JWTAuthMiddleware::class,
 		LoggingMiddleware::class
 	]);
+
+	$router->addRoute("GET", "/users", UserController::class, "getAll", [
+		JWTAuthMiddleware::class,
+		[MultiRoleAuthMiddleware::class, ["admin"]]
+	]);
+
+	$router->addRoute("DELETE", "/users", UserController::class, "delete", [
+		JWTAuthMiddleware::class,
+		[MultiRoleAuthMiddleware::class, ["admin"]]
+	]);
+
+	$router->addRoute("GET", "/admin/dashboard", UserController::class, "admin_dashboard", [
+		JWTAuthMiddleware::class,
+		[MultiRoleAuthMiddleware::class, ["admin"]]
+	]);
+
