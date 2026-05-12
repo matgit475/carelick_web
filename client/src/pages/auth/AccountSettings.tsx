@@ -41,7 +41,7 @@ const AccountSettings = () => {
                 noValidate
                 onSubmit={handleSubmit}
               >
-                <Form.Group controlId="formUsername" className="mb-3">
+                <Form.Group controlId="formUsername" className="mb-3 ">
                   <Form.Label>Username</Form.Label>
                   <Form.Control
                     className="fw-bold"

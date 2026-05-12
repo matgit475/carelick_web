@@ -10,26 +10,27 @@ import {
   Table,
   Pagination,
 } from "react-bootstrap";
+import { FiEdit, FiTrash2, FiSettings } from "react-icons/fi";
 import Animate from "../components/Animate";
 import useGetRequest from "../hooks/api/useGetRequest";
 import usePostRequest from "../hooks/api/usePostRequest";
-import { users, deleteUsers } from "../api/api";
+import { users, deleteUsers, professions } from "../api/api";
 import { useAuth } from "../context/auth";
 import UserStatsCard from "../components/UserStatsCard";
-import useUserStats from "../hooks/useUserStats";
 
 const Users = () => {
   const { user: curr_user } = useAuth();
   const { sendRequest, loading, error, response } = useGetRequest(users);
+  const { sendRequest: sendProfessionsRequest, response: professionsResponse } =
+    useGetRequest(professions);
   const [data, setData] = useState([]);
+  const [professionsData, setProfessionsData] = useState([]);
   const [rowsPerPage, setRowsPerPage] = useState(5);
 
-  useEffect(() => {
-    if (response) {
-      setData(response);
-    }
-  }, [response]);
-
+  const [sortConfig, setSortConfig] = useState({
+    key: "first_name",
+    direction: "asc", // "asc" | "desc"
+  });
   const { sendRequest: deleteSendRequest } = usePostRequest(deleteUsers);
   const [currentPage, setCurrentPage] = useState(1);
   const [filters, setFilters] = useState({
@@ -38,41 +39,105 @@ const Users = () => {
     phone: "",
     role: "",
     account_verified: "",
+    profession_name: "",
   });
+
+  useEffect(() => {
+    if (response) {
+      setData(response);
+      console.log(response);
+    }
+  }, [response]);
+
+  useEffect(() => {
+    if (professionsResponse) {
+      setProfessionsData(professionsResponse);
+      console.log(professionsResponse);
+    }
+  }, [professionsResponse]);
+
+  useEffect(() => {
+    sendRequest();
+    sendProfessionsRequest();
+  }, []);
+
+  const toggleOrder = (column: any) => {
+    setSortConfig((prev) => {
+      if (prev.key === column) {
+        // toggle direction
+        return {
+          key: column,
+          direction: prev.direction === "asc" ? "desc" : "asc",
+        };
+      } else {
+        // new column → default asc
+        return {
+          key: column,
+          direction: "asc",
+        };
+      }
+    });
+    setCurrentPage(1); // Reset to first page on toggle order change
+  };
 
   const handleFilterChange = (field: any, value: any) => {
     setFilters((prev) => ({ ...prev, [field]: value }));
     setCurrentPage(1); // Reset to first page on filter change
   };
+
   const stats = {
     total_users: data.length,
     verified_users: data.filter((item) => item.account_verified == 1).length,
     unverified_users: data.filter((item) => item.account_verified != 1).length,
   };
+
   const filteredRows = data?.filter((row: any) => {
     if (row?.phone == null) {
       row.phone = "";
     }
     return (
       row?.first_name?.toLowerCase()?.includes(filters?.name?.toLowerCase()) &&
+      (filters?.profession_name !== ""
+        ? row?.profession_name.toLowerCase() ===
+          filters?.profession_name.toLowerCase()
+        : true) &&
       row?.email?.toLowerCase()?.includes(filters?.email?.toLowerCase()) &&
       row?.phone?.toLowerCase()?.includes(filters?.phone?.toLowerCase()) &&
-      (filters?.role !== "" ? row?.role === filters?.role : true) &&
+      (filters?.role !== ""
+        ? row?.role.toLowerCase() === filters?.role.toLowerCase()
+        : true) &&
       row?.account_verified
         ?.toString()
         ?.toLowerCase()
         ?.includes(filters?.account_verified?.toString()?.toLowerCase())
     );
   });
-  console.log(filteredRows);
+
+  const result = [...filteredRows].sort((a, b) => {
+    let aValue = a[sortConfig.key];
+    let bValue = b[sortConfig.key];
+
+    // handle nulls
+    aValue = aValue ?? "";
+    bValue = bValue ?? "";
+
+    // convert to string for safe compare
+    if (typeof aValue === "string") aValue = aValue.toLowerCase();
+    if (typeof bValue === "string") bValue = bValue.toLowerCase();
+
+    if (aValue < bValue) return sortConfig.direction === "asc" ? -1 : 1;
+    if (aValue > bValue) return sortConfig.direction === "asc" ? 1 : -1;
+
+    return 0;
+  });
   // Pagination calculations
-  const totalPages = Math.ceil(filteredRows?.length / rowsPerPage);
+  const totalPages = Math.ceil(result?.length / rowsPerPage);
   const goToPage = (page: any) => {
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page);
     }
   };
-  const totalEntities = filteredRows?.length;
+  const totalEntities = result?.length;
   const startIndex = (currentPage - 1) * rowsPerPage + 1;
   const endIndex = Math.min(currentPage * rowsPerPage, totalEntities);
 
@@ -97,7 +162,7 @@ const Users = () => {
 
   const paginatedData = () => {
     const start = (currentPage - 1) * rowsPerPage;
-    return filteredRows?.slice(start, start + rowsPerPage);
+    return result?.slice(start, start + rowsPerPage);
   };
 
   const handleDelete = (user: any) => {
@@ -108,10 +173,6 @@ const Users = () => {
       );
     } else alert("You cannot delete your own account!");
   };
-
-  useEffect(() => {
-    sendRequest();
-  }, []);
 
   return (
     <Container fluid>
@@ -168,28 +229,76 @@ const Users = () => {
                     hover
                     className="mb-0 bordered striped hover fixed-table"
                   >
-                    <thead
-                      style={{
-                        boxShadow: "0px 1px 3px rgba(0,0,0,0.15)",
-                        backgroundColor: "grey",
-                      }}
-                    >
-                      <tr>
-                        <th className={"ps-4"}>First Name</th>
+                    <thead>
+                      <tr style={{ cursor: "pointer" }}>
+                        <th
+                          className={"ps-4"}
+                          onClick={() => toggleOrder("first_name")}
+                        >
+                          First Name{" "}
+                          {sortConfig.key === "first_name"
+                            ? sortConfig.direction === "asc"
+                              ? "↑"
+                              : "↓"
+                            : ""}
+                        </th>
+                        <th
+                          className={"ps-4"}
+                          onClick={() => toggleOrder("profession_name")}
+                        >
+                          Profession{" "}
+                          {sortConfig.key === "profession_name"
+                            ? sortConfig.direction === "asc"
+                              ? "↑"
+                              : "↓"
+                            : ""}
+                        </th>
                         <th
                           style={{ width: "150px" }}
                           className="d-none d-lg-table-cell"
+                          onClick={() => toggleOrder("phone")}
                         >
-                          Phone
+                          Phone{" "}
+                          {sortConfig.key === "phone"
+                            ? sortConfig.direction === "asc"
+                              ? "↑"
+                              : "↓"
+                            : ""}
                         </th>
-                        <th className="d-none  d-md-table-cell">Email</th>
+                        <th
+                          className="d-none  d-md-table-cell"
+                          onClick={() => toggleOrder("email")}
+                        >
+                          Email{" "}
+                          {sortConfig.key === "email"
+                            ? sortConfig.direction === "asc"
+                              ? "↑"
+                              : "↓"
+                            : ""}
+                        </th>
                         <th
                           style={{ width: "150px" }}
                           className="d-none  d-md-table-cell"
+                          onClick={() => toggleOrder("account_verified")}
                         >
-                          Account Verified
+                          Status{" "}
+                          {sortConfig.key === "account_verified"
+                            ? sortConfig.direction === "asc"
+                              ? "↑"
+                              : "↓"
+                            : ""}
                         </th>
-                        <th style={{ width: "125px" }}>Role</th>
+                        <th
+                          style={{ width: "125px" }}
+                          onClick={() => toggleOrder("role")}
+                        >
+                          Role{" "}
+                          {sortConfig.key === "role"
+                            ? sortConfig.direction === "asc"
+                              ? "↑"
+                              : "↓"
+                            : ""}
+                        </th>
                         <th style={{ width: "125px" }}></th>
                       </tr>
                       {/* Filter row */}
@@ -204,6 +313,25 @@ const Users = () => {
                               handleFilterChange("name", e.target.value)
                             }
                           />
+                        </th>
+                        <th className="">
+                          <Form.Select
+                            size="sm"
+                            value={filters.profession_name}
+                            onChange={(e) =>
+                              handleFilterChange(
+                                "profession_name",
+                                e.target.value,
+                              )
+                            }
+                          >
+                            <option value="">All Professions</option>
+                            {professionsData.map((p) => (
+                              <option key={p.id} value={p.profession_name}>
+                                {p.profession_name}
+                              </option>
+                            ))}
+                          </Form.Select>
                         </th>
 
                         <th className="d-none d-lg-table-cell">
@@ -268,6 +396,7 @@ const Users = () => {
                       {paginatedData()?.map((user: any) => (
                         <tr key={user.id}>
                           <td className={"ps-4"}>{user.first_name}</td>
+                          <td className={"ps-4"}>{user.profession_name}</td>
                           <td className="d-none  d-lg-table-cell">
                             {user.phone}
                           </td>
@@ -290,14 +419,22 @@ const Users = () => {
                                 className="me-2"
                                 onClick={() => {}}
                               >
-                                Edit
+                                <FiSettings />
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="light"
+                                className="me-2"
+                                onClick={() => {}}
+                              >
+                                <FiEdit />
                               </Button>
                               <Button
                                 size="sm"
                                 variant="danger"
                                 onClick={() => handleDelete(user)}
                               >
-                                Delete
+                                <FiTrash2 />
                               </Button>
                             </div>
                           </td>

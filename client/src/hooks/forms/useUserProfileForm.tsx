@@ -45,6 +45,7 @@ const useUserProfileForm = () => {
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
+    console.log("Submitting form with values:", values);
     onSubmit().then((data: any) => {
       loadUser();
     });

@@ -41,7 +41,16 @@
         }
 
         public function getAll() {
-            $stmt = $this->db->query("SELECT u.*, g.name AS role FROM users u JOIN users_groups ug ON u.id = ug.user_id JOIN `groups` g ON ug.group_id = g.id");
+            $stmt = $this->db->query("SELECT 
+            u.*,
+            g.name AS role,
+            p.profession_name AS profession_name
+            FROM users u
+            JOIN users_groups ug ON u.id = ug.user_id
+            JOIN `groups` g ON ug.group_id = g.id
+            JOIN members m ON u.id = m.user_id
+            JOIN profession p ON m.profession_id = p.profession_id;");
+
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
 

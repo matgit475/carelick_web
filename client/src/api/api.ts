@@ -96,3 +96,8 @@ export const deleteUsers = async (data: any) => {
   const response = await API.delete("/users", { data });
   return response.data;
 };
+
+export const professions = async () => {
+  const response = await API.get("/professions");
+  return response.data;
+};

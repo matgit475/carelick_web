@@ -44,6 +44,7 @@ const useForm = (
   }, []);
 
   React.useEffect(() => {
+    console.log("Submit Response:", submitResponse);
     if (submitResponse?.message) {
       setState((prevState) => ({
         ...prevState,

@@ -4,12 +4,7 @@ import { FiUsers, FiUserCheck, FiUserX } from "react-icons/fi";
 
 export default function UserStatsCard({ stats }: any) {
   return (
-    <Card className="shadow-sm h-100 w-100">
-      <Card.Header className="fw-semibold d-flex align-items-center gap-2">
-        <FiUsers />
-        User Statistics
-      </Card.Header>
-
+    <Card className="h-100 w-100">
       <Card.Body>
         <Row className="text-center">
           <Col className="border-end">
